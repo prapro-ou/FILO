@@ -1,12 +1,13 @@
         //落ちるスピード
-        const GAME_SPEED = 300;
+        const GAME_SPEED = 10;
+        const DROP_SPEED = 10;
 
         //フィールドサイズ
-        const FIELD_COL = 22;
+        const FIELD_COL = 40;
         const FIELD_ROW = 25;
 
         //ブロック一つのサイズ（ピクセル）
-        const BLOCK_SIZE = 30;
+        const BLOCK_SIZE = 32;
 
         //キャンバスサイズ
         const SCREEN_W = BLOCK_SIZE * FIELD_COL;
@@ -50,7 +51,7 @@
         drawAll();
 
         let direction = 1; // 1:右、-1:左
-        setInterval(dropTetro, GAME_SPEED);
+        setInterval(slideTetro, GAME_SPEED);
 
                 //初期化
                 function init()
@@ -174,7 +175,7 @@
         }
 
         //ブロックの落ちる処理
-        function dropTetro()
+        function slideTetro()
         {
             if (checkMove(direction, 0, tetro)){
                 tetro_x += direction;
@@ -182,6 +183,7 @@
                 direction = -direction;
                 tetro_x += direction;
             }
+            
             //else
             //{
               //  fixTetro();
@@ -194,6 +196,19 @@
             //}
 
             drawAll();
+        }
+
+        //テトロを下に落とす
+        function dropTetro()
+        {
+            direction = 0;
+            if(checkMove(0, 1, tetro)) tetro_y++
+            drawAll();
+        }
+
+        function setdrop(){
+            setInterval(dropTetro, DROP_SPEED)
+            dropTetro();
         }
 
         //テトラミノを動かす（キーボードが押されたとき）
@@ -214,6 +229,9 @@
                 case 32: //スペース
                     let ntetro = rotate();
                     if (checkMove(0, 0, ntetro)) tetro = ntetro;
+                    break;
+                case 13: //Enter
+                    setdrop();
                     break;
             }
             drawAll();
