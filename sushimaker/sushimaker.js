@@ -76,6 +76,8 @@
 
         let direction = 1; // 1:右、-1:左
 
+        let Good = 0;
+
         // テトロが存在するならば、テトロをスライドさせる動きを開始
         if (tetro !== null) {
             setInterval(slideTetro, GAME_SPEED);
@@ -99,6 +101,14 @@
             field[24][10] =1;
             field[24][11] =2;
 
+            //障害物に画像を割り当てる 後で適切に変更する
+            field[12][10] =3;
+            field[12][11] =3;
+            field[16][6] =3;
+            field[16][7] =3;
+            field[6][10] =3;
+            field[6][11] =3;
+
         }
 
         //ブロック一つを描画する
@@ -106,9 +116,13 @@
         {
             let px = x * BLOCK_SIZE;
             let py = y * BLOCK_SIZE;
-            if (field[y][x] > 0) {
+            if (field[y][x] == 1 || field[y][x] == 2) {
                 // シャリの画像を描画
                 con.drawImage(sushiRiceImg[field[y][x] - 1], px, py, BLOCK_SIZE, BLOCK_SIZE);
+            } else if (field[y][x] == 3) {
+                // 障害物の画像を描画
+                con.fillStyle = TETRO_COLORS[field[y][x]];
+                con.fillRect(px, py, BLOCK_SIZE, BLOCK_SIZE);
             } else {
                 // 通常のブロックを描画
                 con.fillStyle=TETRO_COLORS[c];
@@ -121,7 +135,7 @@
         function drawAll()
         {
             con.clearRect(0, 0, SCREEN_W, SCREEN_H);
-            console.log("clear");
+            //console.log("clear");
         
             //フィールドを描画する
             for (let y=0; y<FIELD_ROW; y++)
@@ -148,6 +162,7 @@
                     }
                 }
             }
+            console.log("tetro_x = " + tetro_x + " tetro_y = " + tetro_y);
         }
 
         //ブロックの衝突判定
@@ -179,7 +194,7 @@
                 return true;
         }
 
-            //テトロの回転
+        //テトロの回転 ネタの回転に画像が伴っていない問題がある
         function rotate()
         {
             let ntetro = [];
@@ -225,7 +240,7 @@
                     drawAll();
                 } 
             }
-            console.log("slide");
+            //console.log("slide");
         }
 
         // テトラミノをすべて消去する関数
@@ -257,7 +272,16 @@
                 // 画像が読み込まれたら描画
                 context.drawImage(img, 300, 700, BLOCK_SIZE*3, BLOCK_SIZE*3);
             };
-            img.src = '../sushi_img/sushi_nigiri_maguro.png'; // 表示する画像のパス
+            // シャリにネタが乗ったとき
+            if (Good == 1){
+                img.src = '../sushi_img/sushi_nigiri_maguro.png'; // 表示する画像のパス
+                console.log("showImage");
+            } 
+            // シャリにネタが乗らなかったとき
+            else {
+                img.src = '../sushi_img/shari1.png'; // 表示する画像のパス
+                console.log("showImage1");
+            }
         }
 
         //テトロを下に落とす
@@ -270,6 +294,11 @@
                     tetro_y++;
                     drawAll();
                 } else {
+                    // tetroがシャリに乗ったときGood=1に
+                    if (tetro_y === 22) {
+                        Good = 1;
+                        console.log("Good");
+                    }
                     // テトラミノの消去
                     clearTetrominos();
                     // テトラミノが消えた後、2秒後に画像を表示する
