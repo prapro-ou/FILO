@@ -1,10 +1,10 @@
         //落ちるスピード
-        const GAME_SPEED = 300;
-        const DROP_SPEED = 100;
+        const DROP_SPEED = 200;
+        const GAME_SPEED = 30;
 
         //フィールドサイズ
-        const FIELD_COL = 20;
-        const FIELD_ROW = 25;
+        const FIELD_COL = 40;
+        const FIELD_ROW = 23;
 
         //ブロック一つのサイズ（ピクセル）
         const BLOCK_SIZE = 32;
@@ -19,7 +19,7 @@
         //色
         const TETRO_COLORS = [
             "#FFF",             //0白
-            "#F00"              //1赤
+            "#C90"              //1茶
         ];
 
         let tetro = [
@@ -29,13 +29,21 @@
             [0, 0, 0, 0]
         ];
 
+        /*let barrier = [
+            [0, 0, 0, 0],
+            [1, 1, 1, 1],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
+        ];  */
+
+
         // Imageオブジェクトを作成
         const blockImages = [];
         const imagePaths = [
-        '../sushi_img/maguro_sashimi1.png',
-        '../sushi_img/maguro_sashimi2.png',
-        '../sushi_img/maguro_sashimi3.png',
-        '../sushi_img/maguro_sashimi4.png'
+        '../sushi_img/aji_sashimi1.png',
+        '../sushi_img/aji_sashimi2.png',
+        '../sushi_img/aji_sashimi3.png',
+        '../sushi_img/aji_sashimi4.png'
         ];
 
         imagePaths.forEach((path, index) => {
@@ -44,7 +52,8 @@
         });
 
         // 画像パスを配列に格納
-        const sushiRiceImages = ['../sushi_img/shari1_1.png', '../sushi_img/shari1_2.png'];
+        const sushiRiceImages = ['../sushi_img/shari1_1.png', '../sushi_img/shari1_2.png', '../sushi_img/shari1_3.png', '../sushi_img/shari1_4.png',
+                                 '../sushi_img/shari1_5.png', '../sushi_img/shari1_6.png', '../sushi_img/shari1_7.png', '../sushi_img/shari1_8.png'];
 
         // 画像オブジェクトを格納する配列を初期化
         let sushiRiceImg = sushiRiceImages.map(path => {
@@ -52,6 +61,7 @@
             img.src = path;
             return img;
         });
+
 
         //初期位置
         const START_X = FIELD_COL/2 - TETRO_SIZE/2;
@@ -74,16 +84,16 @@
         init();
         drawAll();
 
-        let direction = 1; // 1:右、-1:左
+        let direction = 1; // 1:右, 0:停止，-1:左
 
         let Good = 0;
 
-        // テトロが存在するならば、テトロをスライドさせる動きを開始
-        if (tetro !== null) {
+         // テトロが存在するならば、テトロをスライドさせる動きを開始
+         if (tetro !== null) {
             setInterval(slideTetro, GAME_SPEED);
         }
 
-        //初期化
+                //初期化
         function init()
         {
             //フィールドのクリア
@@ -95,19 +105,82 @@
                     field[y][x] = 0;
                 }
             }
-            //シャリに画像を割り当てる
-            field[23][10] =1;
-            field[23][11] =2; 
-            field[24][10] =1;
-            field[24][11] =2;
+            //シャリ
+            field[21][19] =1;
+            field[21][20] =2;
+            field[21][21] =3;
+            field[21][22] =4;
+            field[22][19] =5;
+            field[22][20] =6;
+            field[22][21] =7;
+            field[22][22] =8;
 
             //障害物に画像を割り当てる 後で適切に変更する
-            field[12][10] =3;
-            field[12][11] =3;
-            field[16][6] =3;
-            field[16][7] =3;
-            field[6][10] =3;
-            field[6][11] =3;
+            field[4][6] =9;
+            field[4][7] =9;
+            field[4][8] =9;
+            
+            field[4][13] =9;
+            field[4][14] =9;
+            field[4][15] =9;
+            field[4][16] =9;
+            field[4][17] =9;
+            field[4][18] =9;
+            field[4][19] =9;
+            field[4][20] =9;
+            field[4][21] =9;
+            field[4][22] =9;
+            field[4][23] =9;
+            field[4][24] =9;
+            field[4][25] =9;
+            field[4][26] =9;
+
+            field[4][33] =9;
+            field[4][34] =9;
+            field[4][35] =9;
+            field[4][36] =9;
+            field[4][37] =9;
+            field[4][38] =9;
+            field[4][39] =9;
+
+            field[9][17] =9;
+            field[9][18] =9;
+            field[9][19] =9;
+            field[9][20] =9;
+            field[9][21] =9;
+
+            
+            field[16][37] =9;
+            field[16][38] =9;
+            field[16][39] =9;
+
+            field[10][33] =9;
+            field[10][34] =9;
+            field[10][35] =9;
+
+            field[15][0] =9;
+            field[15][1] =9;
+            field[15][2] =9;
+            field[15][3] =9;
+            field[15][4] =9;
+            field[15][5] =9;
+            field[15][6] =9;
+            field[15][7] =9;
+            field[15][8] =9;
+            field[15][9] =9;
+            field[15][10] =9;
+            field[15][11] =9;
+            field[15][12] =9;
+
+            field[17][20] =9;
+            field[17][21] =9;
+            field[17][22] =9;
+
+            field[19][27] =9;
+            field[19][28] =9;
+            field[19][29] =9;
+            field[19][30] =9;
+        
 
         }
 
@@ -116,13 +189,16 @@
         {
             let px = x * BLOCK_SIZE;
             let py = y * BLOCK_SIZE;
-            if (field[y][x] == 1 || field[y][x] == 2) {
+            if (field[y][x] == 1 || field[y][x] == 2 || field[y][x] == 3 || field[y][x] == 4 ||
+                field[y][x] == 5 || field[y][x] == 6 || field[y][x] == 7 || field[y][x] == 8   ) {
                 // シャリの画像を描画
                 con.drawImage(sushiRiceImg[field[y][x] - 1], px, py, BLOCK_SIZE, BLOCK_SIZE);
-            } else if (field[y][x] == 3) {
+            } else if (field[y][x] == 9) {
                 // 障害物の画像を描画
-                con.fillStyle = TETRO_COLORS[field[y][x]];
+                con.fillStyle = TETRO_COLORS[c+1];
                 con.fillRect(px, py, BLOCK_SIZE, BLOCK_SIZE);
+                con.strokeStyle="black";
+                con.strokeRect(px, py, BLOCK_SIZE, BLOCK_SIZE);      
             } else {
                 // 通常のブロックを描画
                 con.fillStyle=TETRO_COLORS[c];
@@ -135,7 +211,6 @@
         function drawAll()
         {
             con.clearRect(0, 0, SCREEN_W, SCREEN_H);
-            //console.log("clear");
         
             //フィールドを描画する
             for (let y=0; y<FIELD_ROW; y++)
@@ -194,7 +269,8 @@
                 return true;
         }
 
-        //テトロの回転 ネタの回転に画像が伴っていない問題がある
+
+            //テトロの回転 ネタの回転に画像が伴っていない
         function rotate()
         {
             let ntetro = [];
@@ -225,7 +301,7 @@
 
         }
 
-        //ブロックの落ちる処理
+        //ブロックの左右の移動
         function slideTetro()
         {
             // tetroがnullでないことを確認
@@ -252,6 +328,12 @@
                 [0, 0, 0, 0],
                 [0, 0, 0, 0]
             ];
+            /*barrier = [
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]
+            ]; */
             console.log("clearTetrominos");
             for(let y = 0; y < FIELD_ROW; y++) {
                 for(let x = 0; x < FIELD_COL; x++) {
@@ -270,11 +352,11 @@
             let img = new Image();
             img.onload = function() {
                 // 画像が読み込まれたら描画
-                context.drawImage(img, 300, 700, BLOCK_SIZE*3, BLOCK_SIZE*3);
+                context.drawImage(img, (BLOCK_SIZE*FIELD_COL)/2-35, (BLOCK_SIZE*FIELD_ROW)/2-15, BLOCK_SIZE*3, BLOCK_SIZE*3);
             };
             // シャリにネタが乗ったとき
             if (Good == 1){
-                img.src = '../sushi_img/sushi_nigiri_maguro.png'; // 表示する画像のパス
+                img.src = '../sushi_img/kaitenzushi_nigiri_aji_white.png'; // 表示する画像のパス
                 console.log("showImage");
             } 
             // シャリにネタが乗らなかったとき
@@ -284,8 +366,18 @@
             }
         }
 
-        //テトロを下に落とす
-        function dropTetro() {
+        function set_drop(){
+            // テトラミノをスライドさせる動きを停止
+            clearInterval(slideTetro);
+            setInterval(dropTetro, DROP_SPEED)
+            dropTetro();
+        }
+
+
+        //ブロックの落ちる処理
+        function dropTetro()
+        {
+            
             direction = 0;
             // tetroがnullでないことを確認
             if (tetro !== null){
@@ -295,7 +387,7 @@
                     drawAll();
                 } else {
                     // tetroがシャリに乗ったときGood=1に
-                    if (tetro_y === 22) {
+                    if (tetro_y === FIELD_ROW - 3) {
                         Good = 1;
                         console.log("Good");
                     }
@@ -307,12 +399,6 @@
             } 
         }
 
-        function setdrop(){
-            // テトラミノをスライドさせる動きを停止
-            clearInterval(slideTetro);
-            setInterval(dropTetro, DROP_SPEED)
-            dropTetro();
-        }
 
         //テトラミノを動かす（キーボードが押されたとき）
         document.onkeydown = function(e)
@@ -328,16 +414,13 @@
                     if ( checkMove(1, 0, tetro) ) tetro_x++;
                     drawAll();
                     break;
-                //case 40: //下
-                    //if ( checkMove(0, 1, tetro) ) tetro_y++;
-                    //break;
                 case 32: //スペース
                     let ntetro = rotate();
                     if (checkMove(0, 0, ntetro)) tetro = ntetro;
                     drawAll();
                     break;
                 case 13: //Enter
-                    setdrop();
+                    set_drop();
                     break;
             }
         }
