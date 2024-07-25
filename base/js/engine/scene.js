@@ -3,7 +3,7 @@ class Scene extends EventDispatcher {
     // canvas:    Canvas   ... Target canvas for drawing.
     // name:      string   ... Scene's name.
     // ----------------------------------------------------
-    constructor(canvas, name, isSub = false) {
+    constructor(canvas, name) {
         super();
         this.canvas = canvas;
         this.name   = name;
@@ -14,10 +14,14 @@ class Scene extends EventDispatcher {
         this.isActive = true;
         this.modal = null;
 
-        if (isSub) {
-            this.modal = new Modal();
+        /*if (modal) {
             this.canvas.set(this.modal.content);
-        }
+        }*/
+    }
+
+    setModal(modal) {
+        this.modal = modal;
+        this.canvas.set(this.modal.content);
     }
 
     setField(field) {

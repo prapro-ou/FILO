@@ -44,3 +44,202 @@ canvas {
     width: 90%;
     max-width: 500px; */
 }
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(0%);
+        background-color: transparent;
+    }
+    to {
+        transform: translateX(0);
+        background-color: #333333;
+    }
+}
+
+.battleAnimation {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    animation: slideInFromRight 2s;
+}
+
+/* 親コンテナ */
+.gameContainer {
+    display: flex;
+    width: 960px;
+    height: 540px;
+    flex-direction: column; /* 子要素を縦に並べる */
+    align-items: center; /* 子要素を中央に配置 */
+    background-image: url("../img/back.png"); /* 背景画像を設定 */
+    background-size: cover; /* 背景画像をコンテナに合わせて表示 */
+}
+
+/* パラメータビュー */
+.parameterView {
+    display: inline-block;
+    width: 520px;
+    text-align: left;
+    margin: 5px 0px 0px 0px;
+    padding: 8px 0px 10px 20px;
+    border: 3px solid;
+    border-color: white;
+    border-radius: 6px;
+}
+
+/* パラメータ（各キャラクター） */
+.parameter {
+    display: inline-block;
+    width: 250px;
+    vertical-align: top;
+}
+div {
+    background-image: none;
+}
+
+/* 主人公と敵の画像ビューを含むコンテナ */
+.imageContainer {
+    display: flex;
+    justify-content: space-around; /* 要素間にスペースを配置 */
+    align-items: center; /* 縦方向のセンタリング */
+    margin: 5px 0; /* コンテナの上下マージン */
+}
+
+/* 主人公画像ビュー  */
+/*.heroImageView {
+    width: 300px;
+    height: 240px;
+    border: 3px solid;
+    border-color: red;
+    border-radius: 6px;
+}*/
+
+/* 敵画像ビュー */
+/*.enemyImageView {
+    width: 300px;
+    height: 240px;
+    border: 3px solid;
+    border-color: blue;
+    border-radius: 6px;
+}*/
+
+/* 主人公と敵画像ビュー  */
+.ImageView {
+    width: 600px;
+    height: 240px;
+    border: 3px solid;
+    border-color: green;
+    border-radius: 6px;
+}
+
+
+/* コマンドビューとメッセージビューを含むコンテナ */
+.CMContainer {
+    display: flex;
+    justify-content: space-around; /* 要素間にスペースを配置 */
+    align-items: center; /* 縦方向のセンタリング */
+    margin: 5px 0; /* コンテナの上下マージン */
+}
+
+/* コマンドビュー */
+.commandView {
+    display: inline-block;
+    width: 108px;
+    height: 150px;
+    text-align: left;
+    vertical-align: top;
+    margin: 0px 0px 20px 0px;
+    padding: 10px 20px 10px 10px;
+    border: 3px solid;
+    border-color: white;
+    border-radius: 6px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* メッセージビュー */
+.messageView {
+    display: inline-block;
+    width: 370px;
+    height: 150px;
+    text-align: left;
+    vertical-align: top;
+    margin: 0px 0px 20px 4px;
+    padding: 10px 0px 10px 20px;
+    border: 3px solid;
+    border-color: white;
+    border-radius: 6px;
+}
+
+/* 各コマンド */
+.attackCommand:hover,
+.recoveryCommand:hover,
+.enemyCommand:hover,
+.panchiCommand:hover,
+.slashingCommand:hover {
+    cursor: pointer;
+}
+
+/* 各コマンド */
+.attackCommand::before,
+.recoveryCommand::before,
+.enemyCommand::before,
+.panchiCommand::before,
+.slashingCommand::before {
+    /* 透明な▶を各コマンドの左に追加 */
+    content: "▶";
+    opacity: 0;
+}
+
+/* 各コマンド */
+.attackCommand:hover::before,
+.recoveryCommand:hover::before,
+.enemyCommand:hover::before,
+.panchiCommand:hover::before,
+.slashingCommand:hover::before {
+    /* マウスオーバーで▶を表示 */
+    opacity: 100;
+}
+
+/* コマンドの味方の名前 */
+.heroName::before {
+    /* インデント調整のため
+       透明な▶を名前の左に追加 */
+    content: "▶";
+    opacity: 0;
+}
+
+.herolife-frame {
+    position: absolute; 
+    bottom: 10px;
+    left: 10px;
+    width: 100px;
+    background-color: rgba(10, 0, 50, 0.6);
+    display: flex;
+    padding: 3px 3px;
+}
+
+.herolife-bar {
+    height: 3px;
+    background-color: rgb(0, 255, 255);
+    transition: 300ms
+}
+
+.enemylife-frame {
+    position: absolute; 
+    top: 10px;
+    right: 10px;
+    width: 100px;
+    background-color: rgba(10, 0, 50, 0.6);
+    display: flex;
+    padding: 3px 3px;
+}
+
+.enemylife-bar {
+    height: 3px;
+    background-color: rgb(255, 0, 0);
+    transition: 300ms
+}

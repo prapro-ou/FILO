@@ -90,6 +90,8 @@ class MainScene extends Scene {
         field.setAttributeBySprite(0, 'obstacle');
         field.setAttributeBySprite(3, 'obstacle');
         field.setAttributeBySprite(3, 'refrigerator');
+        field.setAttributeBySprite(6, 'plate');
+        field.setAttributeBySprite(7, 'dish');
         field.shiftX(-4);
         field.shiftY(-2);
 
@@ -120,7 +122,7 @@ class MainScene extends Scene {
         const [disMapX, disMapY] = getDisplacementByDir(player.direction);
         const isRefrigerator = field.getAttribute(player.mapX + disMapX, player.mapY + disMapY).includes('refrigerator');
         if (isRefrigerator && input.isKeyDown('Enter')) {
-            const subCanvas = new Canvas(CAN_WIDTH, CAN_HEIGHT, 'subCanvas');
+            const subCanvas = new Canvas(CAN_WIDTH, CAN_HEIGHT, 'gameContainer');
             const refrigerator = new Refrigerator(subCanvas);
             this.stackScene(refrigerator);
         }
@@ -129,15 +131,54 @@ class MainScene extends Scene {
 
 class Refrigerator extends Scene {
     constructor(canvas) {
-        super(canvas, 'Refrigerator', true);
+        /*const kari = new kari();*/
+        super(canvas, 'Refrigerator');
+        const kari = new Kari();
+        kari.create();
+        this.setModal(kari);
 
-        const view = new View('#dc143c', canvas);
+        const view = new View(null, canvas);
+
+        console.log('open');
+        //const commandbattle = new CommandBattle();
+        // キャラクターをインスタンス化する
+            this.hero = new Hero("シェフ", 200, 50, 20, 3, 30, "../img/chef.png"  );  // 主人公
+
+            this.enemy  = new Fish("さかな", 100, 40, 10,       "../img/sakana.png");  // まぐろ
+
+            //this.enemy = new Meat("うし"  , 100, 40, 10,       "../img/usi.png"   );  // うし
+
+            this.item  = new Item("まぐろ", "../img/maguro.png");      // まぐろ刺身
+
+            //this.item2 = new Item("牛肉"  , "../img/gyuniku.png");     // 牛肉
+
+            // キャラクター配列をつくる
+            this.characters = [
+                this.hero,     // 主人公
+                this.enemy     // 敵
+            ];
+        /*this.characters.push(hero);     // 主人公
+        //this.characters.push(tuna);     // 敵
+        //this.characters.push(usi);      // 敵
+        this.characters.push(enemy);     // 
+        */
+    
+        // ゲーム管理クラスをインスタンス化する
+        this.gameManage = new GameManage(this.characters);
+
+        // コマンドクラスをインスタンス化する
+        this.command = new Command(this.characters);
+
+        // コマンド選択の準備を整える
+        this.command.preparation();
+
 
         const titleText = new Text('冷蔵庫', F_TITLE, 30, '#000', 'bold');    
         titleText.center();
         titleText.y = 50;
         view.add(titleText);
 
+        //view.add(commandbattle);
         this.setView(view);
     }
 

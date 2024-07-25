@@ -20,6 +20,7 @@ class View {
     }
 
     render(canvas) {
+        if(this._bgColor === null) return;
         canvas.ctx.fillStyle = this._bgColor;
         canvas.ctx.fillRect(
             0, 0,

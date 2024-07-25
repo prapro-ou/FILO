@@ -25,8 +25,10 @@ class Modal {
 
     constructor() {
         this.id = Modal.id;
-        this.modal = this.create();
-        this.content = this.modal.lastElementChild;
+        //this.modal = this.create();
+        this.modal = null;
+        //this.content = this.modal.lastElementChild;
+        this.content = null;
 
         Modal.id++;
     }
@@ -44,6 +46,9 @@ class Modal {
         modal.appendChild(modalWrapper);
         document.body.appendChild(modal);
 
+        this.modal = modal;
+        this.content = this.modal.lastElementChild;
+        
         return modal;
     }
 
