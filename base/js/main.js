@@ -136,7 +136,14 @@ class Refrigerator extends Scene {
         const kari = new Kari();
         kari.create();
         this.setModal(kari);
-        
+
+        // <canvas>要素を取得して削除
+        const canvasElement = document.querySelector('canvas.gameContainer');
+        if (canvasElement) {
+            canvasElement.remove();
+        }
+
+
         const view = new View(null, canvas);
 
         console.log('open');

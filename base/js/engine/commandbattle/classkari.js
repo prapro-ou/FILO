@@ -3,7 +3,7 @@ class Kari extends Modal{
         super();
     }
     create(){
-        super.create();
+        super.create();        
         document.getElementsByClassName("js-modal__wrapper")[0].innerHTML = `
         <div class="gameContainer">
             <div class="parameterView"></div>
