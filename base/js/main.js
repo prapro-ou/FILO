@@ -136,7 +136,7 @@ class Refrigerator extends Scene {
         const kari = new Kari();
         kari.create();
         this.setModal(kari);
-
+        
         const view = new View(null, canvas);
 
         console.log('open');
@@ -172,11 +172,14 @@ class Refrigerator extends Scene {
         // コマンド選択の準備を整える
         this.command.preparation();
 
+        // hpバーの表示
+        this.healthBar = new HealthBar();
 
-        const titleText = new Text('冷蔵庫', F_TITLE, 30, '#000', 'bold');    
+
+        /*const titleText = new Text('冷蔵庫', F_TITLE, 30, '#000', 'bold');    
         titleText.center();
         titleText.y = 50;
-        view.add(titleText);
+        view.add(titleText);*/
 
         //view.add(commandbattle);
         this.setView(view);

@@ -74,7 +74,7 @@ class Scene extends EventDispatcher {
 
     close() {
         if (this.modal === null) return;
-console.log(this.name)
+        console.log(this.name)
         const e = new Event(this);
         this.dispatchEvent('close', e);
     }

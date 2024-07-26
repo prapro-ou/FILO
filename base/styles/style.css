@@ -74,6 +74,7 @@ canvas {
     align-items: center; /* 子要素を中央に配置 */
     background-image: url("../img/back.png"); /* 背景画像を設定 */
     background-size: cover; /* 背景画像をコンテナに合わせて表示 */
+    margin: 0 auto; /* コンテナを中央に配置 */
 }
 
 /* パラメータビュー */
@@ -175,8 +176,8 @@ div {
 }
 
 /* 各コマンド */
-.attackCommand:hover,
-.recoveryCommand:hover,
+#attackCommand:hover,
+#recoveryCommand:hover,
 .enemyCommand:hover,
 .panchiCommand:hover,
 .slashingCommand:hover {
@@ -184,8 +185,8 @@ div {
 }
 
 /* 各コマンド */
-.attackCommand::before,
-.recoveryCommand::before,
+#attackCommand::before,
+#recoveryCommand::before,
 .enemyCommand::before,
 .panchiCommand::before,
 .slashingCommand::before {
@@ -195,8 +196,8 @@ div {
 }
 
 /* 各コマンド */
-.attackCommand:hover::before,
-.recoveryCommand:hover::before,
+#attackCommand:hover::before,
+#recoveryCommand:hover::before,
 .enemyCommand:hover::before,
 .panchiCommand:hover::before,
 .slashingCommand:hover::before {
@@ -205,7 +206,7 @@ div {
 }
 
 /* コマンドの味方の名前 */
-.heroName::before {
+#heroName::before {
     /* インデント調整のため
        透明な▶を名前の左に追加 */
     content: "▶";

@@ -45,8 +45,8 @@ class Hero
 	{
 		// はじめに表示するコマンド
 		if(event === "start") {
-			let text = ['<div><b id="heroName">' + this.name + '</b></div>',
-			            '<div id="attackCommand">攻撃</div>',
+			let text = ['<div><b id="heroName">' + this.name + '</b></div>' +
+			            '<div id="attackCommand">攻撃</div>' +
 			            '<div id="recoveryCommand">薬草</div>'];
 			return text;
 		}
@@ -96,8 +96,9 @@ class Hero
 				div.textContent = attack.type;
 
 				// クリックイベントリスナーを追加
-				div.addEventListener('click', () => selectAttackType(attack.type));
-
+				div.addEventListener('click', this.command.callback);
+				//div.addEventListener('click', () => selectAttackType(attack.type));
+					
 				// outerHTMLを使用して文字列として返す
 				return div.outerHTML;
 			});
@@ -125,22 +126,23 @@ class Hero
 		}
 		// 攻撃コマンドが選択された場合
 		if(this.command === "attackCommand") {
-			let element = document.getElementsByClassName("enemyCommand");
+			console.log("attackCommand");
+			let element = document.getElementById("enemyCommand")[0];
 			for(let i = 0; i < element.length; ++i) {
-				element[i].addEventListener("click", command.callback);
+				element[i].addEventListener("click", this.command.callback);
 			}
 		}
 		// 敵が選択された場合
 		if(this.command === "enemyCommand") {
 			let element = document.getElementsByClassName("panchiCommand");
 			for(let i = 0; i < element.length; ++i) {
-				element[i].addEventListener("click", command.callback);
+				element[i].addEventListener("click", this.command.callback);
 			}
 		}
 		if(this.command === "enemyCommand") {
 			let element = document.getElementsByClassName("slashingCommand");
 			for(let i = 0; i < element.length; ++i) {
-				element[i].addEventListener("click", command.callback);
+				element[i].addEventListener("click", this.command.callback);
 			}
 		}
 
@@ -753,7 +755,7 @@ class Command
 	callback(event)
 	{
 		// 味方のコマンド選択
-		let result = command.commandTurn(event)
+		let result = this.command.commandTurn(event)
 
 		// 味方全員のコマンド選択が終わった場合
 		if(result) {
@@ -767,7 +769,7 @@ class Command
 				{
 					// 戦闘が終了していない場合、コマンドを表示する
 					if(bool) {
-						command.preparation();
+						this.command.preparation();
 					}
 				}
 			);
@@ -778,7 +780,7 @@ class Command
 	commandTurn(event)
 	{
 		// 味方1人のコマンドを取得する
-		let result = characters[this.heroElementNum[this.current]].getCommand(event);
+		let result = this.characters[this.heroElementNum[this.current]].getCommand(event);
 
 		// 味方1人のコマンド入力が終わりの場合
 		if (result === "end") {
@@ -792,12 +794,12 @@ class Command
 				// コマンドを表示する
 				this.showCommand(text);
 				// 表示されたコマンドにイベントハンドラを割り当てる
-				characters[this.heroElementNum[this.current]].setEventHandler("start");
+				this.characters[this.heroElementNum[this.current]].setEventHandler("start");
 			}
 			// 味方全員のコマンド選択が終わった場合
 			else {
 				// コマンドビューを空白にする
-				commandView.innerHTML = "";
+				this.commandView.innerHTML = "";
 
 				this.current = 0;
 				return true;
@@ -808,7 +810,7 @@ class Command
 			// 次のコマンドを表示して、イベントハンドラを登録する
 			this.showCommand(result);
 			// 表示されたコマンドにイベントハンドラを割り当てる
-			characters[this.heroElementNum[this.current]].setEventHandler();
+			this.characters[this.heroElementNum[this.current]].setEventHandler();
 		}
 
 		return false;
