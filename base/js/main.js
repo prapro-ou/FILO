@@ -145,6 +145,14 @@ class Refrigerator extends Scene {
             }
         }
         
+
+        // <canvas>要素を取得して削除
+        const canvasElement = document.querySelector('canvas.gameContainer');
+        if (canvasElement) {
+            canvasElement.remove();
+        }
+
+
         const view = new View(null, canvas);
 
         console.log('open');
