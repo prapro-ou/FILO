@@ -16,6 +16,7 @@ class Hero
 		this.herb = herb;            // 薬草
 		this.herbPower = herbPower;  // 薬草の回復力
         this.path = path;            // 画像の場所
+		this.characters = "";        // キャラクター配列
 
 		//this.Hpercent = 100/this.maxHp; // hero体力バーの1%の値
 		//this.Epercent = 100/this.target.maxHp; // enemy体力バーの1%の値
@@ -51,6 +52,7 @@ class Hero
 			return text;
 		}
 
+		console.log("getCommand");
 		// 選択されたコマンドのidまたはclassを取得する
 		if(event.target.id != "") {
 			this.command = event.target.id;
@@ -62,14 +64,17 @@ class Hero
 		// 攻撃コマンドが選択されたとき
 		if(this.command === "attackCommand") {
 			// 生存している敵の配列（characters配列の要素番号）を取得する
-			let livedEnemy = searchLivedcharacterByType("enemy");
+			let livedEnemy = searchLivedcharacterByType(this.characters, "enemy");
+			console.log(livedEnemy)
 			// 生存している敵をコマンドビューに表示するためのHTML
 			let livedEnemyHTML = [];
 
 			// 生存している敵をコマンドビューに表示する
 			for(let c in livedEnemy) {
+				console.log(c)
 				livedEnemyHTML.push('<div class="enemyCommand">' +
-				                    characters[livedEnemy[c]].name + '</div>');
+				                    this.characters[livedEnemy[c]].name + '</div>');
+			console.log(this.characters[livedEnemy[c]].name)
 			}
 			livedEnemyHTML.unshift('<div><b id="heroName">' + this.name + '</b></div>');
 
@@ -114,20 +119,22 @@ class Hero
 		}
 	}
 
+	/*いらないかも
 	// 表示されたコマンドにイベントハンドラを登録する
 	setEventHandler(event)
 	{
+		console.log(event);
 		// コマンドの初期状態の場合
 		if(event === "start") {
 			// 攻撃コマンドのイベントハンドラを設定する
-			attackCommand.addEventListener("click", this.command.callback);
+			document.getElementById("attackCommand").addEventListener("click", (e) => this.command.callback(e));
 			// 回復コマンドのイベントハンドラを設定する
 			recoveryCommand.addEventListener("click", this.command.callback);
 		}
 		// 攻撃コマンドが選択された場合
 		if(this.command === "attackCommand") {
 			console.log("attackCommand");
-			let element = document.getElementById("enemyCommand")[0];
+			let element = document.getElementsByClassName("enemyCommand");
 			for(let i = 0; i < element.length; ++i) {
 				element[i].addEventListener("click", this.command.callback);
 			}
@@ -146,7 +153,7 @@ class Hero
 			}
 		}
 
-	}
+	}*/
 
 	// 行動する
 	action()
@@ -366,6 +373,7 @@ class Enemy
 		this.offense = offense;  // 攻撃力
 		this.speed = speed;      // 素早さ
 		this.path = path         // 画像の場所
+		this.characters = "";    // キャラクター配列
 	}
 
 	// 表示用のパラメータを返す
@@ -399,13 +407,13 @@ class Fish extends Enemy
 	attack()
 	{
 		// 生存している味方をランダムに選択する
-		let f = characters[searchLivedcharacterRamdom("hero")];
+		let f = this.characters[searchLivedcharacterRamdom(this.characters, "hero")];
 
 		// 攻撃対象の体力から、自分の攻撃力を引く
 		f.hp -= this.offense;
 
 		// 攻撃対象の体力バーを変更する
-		alterLife_hero(-this.offense*0.5);
+		//alterLife_hero(-this.offense*0.5);
 
 		// 攻撃相手の体力がマイナスになる場合は0にする
 		if(f.hp < 0) {
@@ -622,13 +630,13 @@ class GameManage
 	jadgeWinLose()
 	{
 		// 味方が残っていなければゲームオーバー
-		if(! isAliveByType("hero")) {
+		if(! isAliveByType(this.characters, "hero")) {
 			this.Message.addMessage("全滅しました・・・<br>");
 			return "lose";
 		}
 
 		// 敵が残っていなければ勝利
-		if(! isAliveByType("enemy")) {
+		if(! isAliveByType(this.characters, "enemy")) {
 			this.Message.addMessage("モンスターをやっつけた<br>");
 			return "win";
 		}
@@ -712,13 +720,15 @@ class GameManage
 class Command
 {
 	// コンストラクタ
-	constructor(characters)
+	constructor(characters, gameManage)
 	{
 		this.characters = characters;
+		this.gameManage = gameManage;
 		// コマンドを実行する味方
 		this.heroElementNum = [];
 		// 何人目の味方がコマンド選択中か（0が1人目）
 		this.current = 0;
+		this.isCalledPreparation = false;
 	}
 
 	// コマンド入力の準備をする
@@ -741,7 +751,13 @@ class Command
 		this.showCommand(text);
 
 		// イベントハンドラを登録する
-		this.characters[this.heroElementNum[this.current]].setEventHandler("start");
+		//this.characters[this.heroElementNum[this.current]].setEventHandler("start");
+	
+		if (!this.isCalledPreparation) {
+			document.getElementById("attackCommand").addEventListener("click", (e) => this.callback(e));
+			document.getElementById("recoveryCommand").addEventListener("click", (e) => this.callback(e));
+			this.isCalledPreparation = true;
+		}
 	}
 
 	// コマンドを表示する
@@ -754,13 +770,14 @@ class Command
 	// コマンドをクリックしたときのコールバック関数
 	callback(event)
 	{
+		console.log(event);
 		// 味方のコマンド選択
-		let result = this.command.commandTurn(event)
+		let result = this.commandTurn(event)
 
 		// 味方全員のコマンド選択が終わった場合
 		if(result) {
 			// 戦闘開始
-			let promise = gameManage.battle();
+			let promise = this.gameManage.battle();
 
 			// gameManage.battle()が終了したときに実行される
 			promise.then(
@@ -769,7 +786,7 @@ class Command
 				{
 					// 戦闘が終了していない場合、コマンドを表示する
 					if(bool) {
-						this.command.preparation();
+						this.preparation();
 					}
 				}
 			);
@@ -799,8 +816,8 @@ class Command
 			// 味方全員のコマンド選択が終わった場合
 			else {
 				// コマンドビューを空白にする
-				this.commandView.innerHTML = "";
-
+				//this.commandView.innerHTML = "";
+				document.getElementsByClassName("commandView")[0].innerHTML = "";
 				this.current = 0;
 				return true;
 			}
@@ -810,7 +827,7 @@ class Command
 			// 次のコマンドを表示して、イベントハンドラを登録する
 			this.showCommand(result);
 			// 表示されたコマンドにイベントハンドラを割り当てる
-			this.characters[this.heroElementNum[this.current]].setEventHandler();
+			//this.characters[this.heroElementNum[this.current]].setEventHandler();
 		}
 
 		return false;
@@ -841,7 +858,7 @@ class Message
 // characters配列関連
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 種別（type）で指定されたキャラクターが、全滅しているか調べる
-function isAliveByType(type)
+function isAliveByType(characters, type)
 {
 	for(let c in characters) {
 		// 1人でも生存していればtrueを返す
@@ -862,7 +879,7 @@ function searchCharacterByName(name)
 	// 指定されたキャラクターを探す
 	let i = 0;
 	for(let c in characters) {
-		if(characters[c].name === name) {
+		if(c.name === name) {
 			characterElementNum.push(i);
 		}
 		++i;
@@ -872,25 +889,26 @@ function searchCharacterByName(name)
 }
 
 // 種別（type）で指定された生存しているキャラクターを探し、配列の要素番号を返す
-function searchLivedcharacterByType(type)
+function searchLivedcharacterByType(characters, type)
 {
 	// 種別（type）で指定された生存しているキャラクター配列の要素番号
 	let characterElementNum = [];
-
+	console.log(characters);
 	// 種別（type）で指定された生存しているキャラクターを探す
 	let i = 0;
-	for(let c in characters) {
-		if(characters[c].type === type && characters[c].liveFlag === true) {
+	characters.forEach((c) => {
+		console.log(c);
+		if(c.type === type && c.liveFlag === true) {
 			characterElementNum.push(i);
 		}
 		++i;
-	}
+	});
 
 	return characterElementNum;
 }
 
 // 種別（type）で指定された生存しているキャラクターの要素番号をランダムで返す
-function searchLivedcharacterRamdom(type)
+function searchLivedcharacterRamdom(characters, type)
 {
 	// 生存しているキャラクター
 	let livedcharacter = [];

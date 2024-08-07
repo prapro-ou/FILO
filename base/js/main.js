@@ -137,6 +137,14 @@ class Refrigerator extends Scene {
         kari.create();
         this.setModal(kari);
         
+        // クラスがKariなら<canvas width="640" height="320" class="gameContainer"></canvas>を消す
+        if (kari.constructor.name === 'Kari') {
+            const gameContainer = document.querySelector('canvas.gameContainer');
+            if (gameContainer) {
+                gameContainer.remove();
+            }
+        }
+        
         const view = new View(null, canvas);
 
         console.log('open');
@@ -157,6 +165,10 @@ class Refrigerator extends Scene {
                 this.hero,     // 主人公
                 this.enemy     // 敵
             ];
+
+            this.hero.characters = this.characters;
+            console.log(this.hero.characters);
+            this.enemy.characters = this.characters;
         /*this.characters.push(hero);     // 主人公
         //this.characters.push(tuna);     // 敵
         //this.characters.push(usi);      // 敵
@@ -167,7 +179,7 @@ class Refrigerator extends Scene {
         this.gameManage = new GameManage(this.characters);
 
         // コマンドクラスをインスタンス化する
-        this.command = new Command(this.characters);
+        this.command = new Command(this.characters, this.gameManage);
 
         // コマンド選択の準備を整える
         this.command.preparation();
