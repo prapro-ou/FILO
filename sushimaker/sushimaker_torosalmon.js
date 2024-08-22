@@ -2,7 +2,7 @@ class  Torosalmon extends Sushimaker {
     constructor() {
         super('torosalmon', 120, 20); //名前, dropSpeed, gameSpeed
         this.initImg();
-            this.setRice(19); //シャリの右端のx座標
+            this.setRice(4); //シャリの右端のx座標
 
             this.setBaran(0, 4);
             
