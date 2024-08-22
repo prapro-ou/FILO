@@ -87,6 +87,7 @@ canvas {
     border: 3px solid;
     border-color: white;
     border-radius: 6px;
+    background-color: white;
 }
 
 /* パラメータ（各キャラクター） */
@@ -159,6 +160,7 @@ div {
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    background-color: white;
 }
 
 /* メッセージビュー */
@@ -173,6 +175,7 @@ div {
     border: 3px solid;
     border-color: white;
     border-radius: 6px;
+    background-color: white;
 }
 
 /* 各コマンド */
@@ -224,6 +227,7 @@ div {
 }
 
 .herolife-bar {
+    width: 100%;
     height: 3px;
     background-color: rgb(0, 255, 255);
     transition: 300ms
@@ -240,6 +244,7 @@ div {
 }
 
 .enemylife-bar {
+    width: 100%;
     height: 3px;
     background-color: rgb(255, 0, 0);
     transition: 300ms

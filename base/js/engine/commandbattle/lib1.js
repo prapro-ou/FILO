@@ -49,75 +49,85 @@ class Hero
 			let text = ['<div><b id="heroName">' + this.name + '</b></div>' +
 			            '<div id="attackCommand">攻撃</div>' +
 			            '<div id="recoveryCommand">薬草</div>'];
-			return text;
+			return text.join('');
 		}
 
 		console.log("getCommand");
 		// 選択されたコマンドのidまたはclassを取得する
-		if(event.target.id != "") {
+		if (event.target.id) {
 			this.command = event.target.id;
-		}
-		else {
+		} else if (event.target.className) {
 			this.command = event.target.className;
 		}
 
 		// 攻撃コマンドが選択されたとき
 		if(this.command === "attackCommand") {
+			console.log(this.command);
 			// 生存している敵の配列（characters配列の要素番号）を取得する
 			let livedEnemy = searchLivedcharacterByType(this.characters, "enemy");
 			console.log(livedEnemy)
-			// 生存している敵をコマンドビューに表示するためのHTML
-			let livedEnemyHTML = [];
 
-			// 生存している敵をコマンドビューに表示する
-			for(let c in livedEnemy) {
-				console.log(c)
-				livedEnemyHTML.push('<div class="enemyCommand">' +
-				                    this.characters[livedEnemy[c]].name + '</div>');
-			console.log(this.characters[livedEnemy[c]].name)
-			}
+			// 生存している敵をコマンドビューに表示するためのHTMLを生成する
+			let livedEnemyHTML = livedEnemy.map(enemyIndex => 
+				'<div class="enemyCommand" data-enemy-index="' + enemyIndex + '">' + this.characters[enemyIndex].name + '</div>'
+			);
+
+			// ヒーロー名を先頭に追加
 			livedEnemyHTML.unshift('<div><b id="heroName">' + this.name + '</b></div>');
 
+			// 配列を文字列に変換
+			livedEnemyHTML = livedEnemyHTML.join('');   // .join('')とすることで配列を文字列に変換する際に区切り文字を指定
+						
 			return livedEnemyHTML;
 		}
 
 		// 薬草コマンドが選択されたとき
 		else if(this.command === "recoveryCommand") {
+			console.log(this.command);
+			Message.clearMessage();
 			return "end";
 		}
+
 		// 敵が選択されたとき
-		else if(this.command.includes("enemyCommand")) {
-    		// 攻撃の種類を定義する
-			const attackTypes = [
-				{ type: '打撃', className: 'panchiCommand' },
-				{ type: '斬撃', className: 'slashingCommand' }
-			];
-
-			// 攻撃の種類を表示するためのHTMLを生成する
-			let attackTypeHTML = attackTypes.map(attack => {
-				// div要素を作成
-				let div = document.createElement('div');
-				div.className = attack.className;
-				div.textContent = attack.type;
-
-				// クリックイベントリスナーを追加
-				div.addEventListener('click', this.command.callback);
-				//div.addEventListener('click', () => selectAttackType(attack.type));
-					
-				// outerHTMLを使用して文字列として返す
-				return div.outerHTML;
-			});
-
-			// ヒーロー名を先頭に追加
-			attackTypeHTML.unshift('<div><b id="heroName">' + this.name + '</b></div>');
-
-			return attackTypeHTML;
+		if (this.command === "enemyCommand") {
+			console.log("あああ");
+			return this.getAttackOptionsHTML();
+			//return "continue";
 		}
 		// 攻撃の種類が選択されたとき
-		else if(this.command === "panchiCommand" || this.command === "slashingCommand") {
+		if(this.command === "panchiCommand" || this.command === "slashingCommand") {
+			console.log(this.command);
+			Message.clearMessage();
 			return "end";
 		}
 	}
+	
+	// attackCommandが選択されたときに表示する攻撃オプションのHTMLを返す
+	getAttackOptionsHTML() {
+		const attackTypes = [
+			{ type: '打撃', className: 'panchiCommand'},
+			{ type: '斬撃', className: 'slashingCommand'}
+		];
+
+
+		// 攻撃の種類を表示するためのHTMLを生成する
+		let attackTypeHTML = attackTypes.map(attack => {
+			return `<div class="${attack.className}">${attack.type}</div>`;
+		});
+			
+		// ヒーロー名を先頭に追加
+		attackTypeHTML.unshift('<div><b id="heroName">' + this.name + '</b></div>');
+		console.log(this.command);
+		return attackTypeHTML.join('');
+	}
+
+	// 攻撃コマンドが選択されたときに表示する攻撃オプションのHTMLを返す
+	/*updateCommandViewWithAttackOptions(selectedEnemyIndex) {
+		const attackOptionsHTML = this.getAttackOptionsHTML();
+		document.querySelector('.commandView').innerHTML = attackOptionsHTML;
+		document.querySelector('.panchiCommand').addEventListener('click', () => this.panchi(selectedEnemyIndex));
+		document.querySelector('.slashingCommand').addEventListener('click', () => this.slashing(selectedEnemyIndex));
+	}*/
 
 	/*いらないかも
 	// 表示されたコマンドにイベントハンドラを登録する
@@ -160,7 +170,7 @@ class Hero
 	{
     	if(this.hp > 0) {
         	// コマンドに応じた処理を行う
-        	let attackType;
+        	let attackType = "";
        		switch(this.command) {
             	// 攻撃
             	case "panchiCommand":
@@ -182,17 +192,20 @@ class Hero
             	    this.recovery();
             	    break;
 				default:
+					Message.clearMessage();
 					Message.printMessage(this.name + "はボーッとした<br>");
         	}
         	switch(attackType) {
             	// 打撃攻撃
             	case "panchiCommand":
-					this.target = enemy; // 攻撃対象を敵に設定
-                	this.panchi();
-                	break;
+					// 攻撃対象を敵に設定
+					this.target = this.characters[searchLivedcharacterRamdom(this.characters, "enemy")];
+					this.panchi();
+					break;
             	// 斬撃攻撃
             	case "slashingCommand":
-					this.target = enemy; // 攻撃対象を敵に設定
+					// 攻撃対象を敵に設定
+					this.target = this.characters[searchLivedcharacterRamdom(this.characters, "enemy")];
                 	this.slashing();
                 	break;
             	default:
@@ -203,38 +216,38 @@ class Hero
 	// 打撃攻撃
 	async panchi()
 	{	
-    	// 攻撃相手が生存していれば攻撃する
+		//const enemy = this.characters[enemyIndex];
+    	const attackType = "panchiCommand";
+		console.log("打撃攻撃が" + this.target.name + "にヒットしました！");
+		// 攻撃相手が生存していれば攻撃する
     	if(this.target.liveFlag) {
 		
-    	    this.move(); // 攻撃時のキャラの移動
+    	    this.move(attackType); // 攻撃時のキャラの移動
 
 			// 攻撃対象のクラスがFishのときの条件式
 			if(this.target instanceof Fish) {
 				// 体力200に対して100pxで表現するため、0.5をかける　変数名を変える
-				let fishhealth = this.offense*0.5;
+				//let panchi_fish = this.offense*0.5;
 
 				// 敵の体力から、自分の攻撃力を引く
 				this.target.hp -= this.offense;
 
-				// 敵の体力バーを変更する
-				alterLife_enemy(-fishhealth); 
-
-				Message.printMessage(this.name + "の波乗り<br>効果抜群だ！" +
-									this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
+				Message.printMessage(this.name + "の波乗り<br>効果抜群だ！" + 
+					this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
 			}
-			else if(this.target instanceof Meat) {
-				let meathealth = this.offense;
+			else if(this.target instanceof Mollusk) {
+				//let molluskhealth = this.offense;
 				this.target.hp -= this.offense*2;
-				alterLife_enemy(-meathealth*2);
 								
 				Message.printMessage(this.name + "の波乗り<br>" +
-									this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
+					this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
 			}
-
     	    // 攻撃相手の体力がマイナスになる場合は、0にする
     	    if(this.target.hp < 0) {
-    	        this.target.hp = 0;
+				this.target.hp = 0;
     	    }
+			// 敵の体力バーを変更する
+				alterLife_enemy(this.target.hp, this.target.maxHp); 
 		}
     	else {
     	    Message.printMessage(this.name + "の攻撃・・・<br>" + this.target.name + "は倒れている<br>");
@@ -244,37 +257,40 @@ class Hero
 	// 斬撃攻撃する
 	async slashing()
 	{
+		//const enemy = this.characters[enemyIndex];
+		const attackType = "slashingCommand";
+    	console.log("斬撃攻撃が" + this.target.name + "にヒットしました！");
     	// 攻撃相手が生存していれば攻撃する
-    	if(this.target.liveFlag) {
+		if(this.target.liveFlag) {
 
-			this.move(); // 攻撃時のキャラの移動
+			this.move(attackType); // 攻撃時のキャラの移動
 
 			// 攻撃対象のクラスがFishのときの条件式
 			if(this.target instanceof Fish) {
 				// 体力200に対して100pxで表現するため、0.5をかける　変数名を変える
-				let fishhealth = this.offense*0.5;
+				//let fishhealth = this.offense*0.5;
 
+				console.log(this.target.hp);
 				// 敵の体力から、自分の攻撃力を引く
 				this.target.hp -= this.offense*2;
-
-				// 敵の体力バーを変更する
-				alterLife_enemy(-fishhealth*2); 
+				console.log(this.target.hp);
 
 				Message.printMessage(this.name + "の斬撃<br>効果抜群だ！" +
-									this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
+					this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
 			}
-			else if(this.target instanceof Meat) {
-				let meathealth = this.offense;
+			else if(this.target instanceof Mollusk) {
+				//let molluskhealth = this.offense;
 				this.target.hp -= this.offense;
-				alterLife_enemy(-meathealth);
 
 				Message.printMessage(this.name + "の斬撃<br>" +
-									this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
+					this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
 			}
         	// 攻撃相手の体力がマイナスになる場合は、0にする
         	if(this.target.hp < 0) {
         	    this.target.hp = 0;
         	}
+			// 敵の体力バーを変更する
+				alterLife_enemy(this.target.hp, this.target.maxHp); 
 		}
     	else {
         	Message.printMessage(this.name + "の攻撃・・・<br>" + this.target.name + "は倒れている<br>");
@@ -282,43 +298,43 @@ class Hero
 	}
 	
 	//攻撃時のキャラの移動
-	async move() {
+	async move(attackType) {
 		// 打撃攻撃の場合
-		if(this.command === "panchiCommand") {
+		if(attackType === "panchiCommand") {
 			// wave.pngを表示する
-			document.getElementsByClassName("wave")[0].style.display = "block";
+			document.getElementById("wave").style.display = "block";
 			// wave.pngを右に移動させる
 			for(let i = 0; i < 30; i++) {
-				document.getElementsByClassName("wave")[0].style.transform = "translateX(" + i + "px)";
+				document.getElementById("wave").style.transform = "translateX(" + i + "px)";
 				await sleep(10);
 			}
 			// wave.pngを隠す
-			document.getElementsByClassName("wave")[0].style.display = "none";
+			document.getElementById("wave").style.display = "none";
 			// wave.pngを元の位置に戻す
-			document.getElementsByClassName("wave")[0].style.transform = "translateX(0px)";
+			document.getElementById("wave").style.transform = "translateX(0px)";
 		}
 		// 斬撃攻撃の場合
-		else if(this.command === "slashingCommand") {
+		else if(attackType === "slashingCommand") {
 			for(let i = 0; i < 100; i++) {
-				document.getElementsByClassName("heroImage")[0].style.transform = "translateX(" + i + "px)";
+				document.getElementById("heroImage").style.transform = "translateX(" + i + "px)";
 				await sleep(10);
 			}
 		}
 		
 		// effct1.pngを表示する
-		document.getElementsByClassName("effect1")[0].style.display = "block";
+		document.getElementById("effect1").style.display = "block";
 
 		// 主人公の画像を上に移動させる
-		document.getElementsByClassName("heroImage")[0].style.transform = "translateY(-50px)";
+		document.getElementById("heroImage").style.transform = "translateY(-50px)";
 	
 		// 1秒待つ
 		await sleep(1000);
 	
 		// 主人公の画像を元に戻す
-		document.getElementsByClassName("heroImage")[0].style.transform = "translateY(0)";
+		document.getElementById("heroImage").style.transform = "translateY(0)";
 	
 		// effct1.pngを隠す
-		document.getElementsByClassName("effect1")[0].style.display = "none";
+		document.getElementById("effect1").style.display = "none";
 
 	}
 
@@ -340,9 +356,6 @@ class Hero
 		// 回復する値
 		let heal = this.herbPower;
 
-		// 自分の体力バーを変更する
-		alterLife_hero(+heal*0.5);
-
 		// 最大体力を超えて回復してしまいそうな場合
 		if(this.maxHp - this.hp < this.herbPower) {
 			heal = this.maxHp - this.hp;
@@ -350,6 +363,9 @@ class Hero
 
 		// 体力を回復する
 		this.hp += heal;
+
+		// 攻撃対象の体力バーを変更する
+		alterLife_hero(this.hp, this.maxHp);
 
 		// 薬草をひとつ減らす
 		--this.herb;
@@ -364,11 +380,12 @@ class Hero
 class Enemy
 {
 	// コンストラクタ
-	constructor(name, hp, offense, speed, path)
+	constructor(name, maxHp, offense, speed, path)
 	{
 		this.name = name;        // 名前
 		this.type = "enemy";     // 敵味方種別
-		this.hp = hp;            // 体力
+		this.maxHp = maxHp;          // 最大体力
+		this.hp = maxHp;             // 体力
 		this.liveFlag = true;    // 生存フラグ
 		this.offense = offense;  // 攻撃力
 		this.speed = speed;      // 素早さ
@@ -412,13 +429,13 @@ class Fish extends Enemy
 		// 攻撃対象の体力から、自分の攻撃力を引く
 		f.hp -= this.offense;
 
-		// 攻撃対象の体力バーを変更する
-		//alterLife_hero(-this.offense*0.5);
-
 		// 攻撃相手の体力がマイナスになる場合は0にする
 		if(f.hp < 0) {
 			f.hp = 0;
 		}
+
+		// 攻撃対象の体力バーを変更する
+		alterLife_hero(f.hp, f.maxHp);
 
 		// 攻撃相手が生存していれば攻撃
 		if(f.liveFlag) {
@@ -432,9 +449,9 @@ class Fish extends Enemy
 }
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// ミートクラス
+// 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-class Meat extends Enemy
+class Mollusk extends Enemy
 {
 	// コンストラクタ
 	constructor(name, hp, offense, speed, path)
@@ -446,18 +463,18 @@ class Meat extends Enemy
 	attack()
 	{
 		// 生存している味方をランダムに選択する
-		let f = characters[searchLivedcharacterRamdom("hero")];
+		let f = this.characters[searchLivedcharacterRamdom(this.characters, "hero")];
 
 		// 攻撃対象の体力から、自分の攻撃力を引く
 		f.hp -= this.offense;
-
-		// 攻撃対象の体力バーを変更する
-		alterLife_hero(-this.offense*0.5);
 
 		// 攻撃相手の体力がマイナスになる場合は0にする
 		if(f.hp < 0) {
 			f.hp = 0;
 		}
+
+		// 攻撃対象の体力バーを変更する
+		alterLife_hero(f.hp, f.maxHp);
 
 		// 攻撃相手が生存していれば攻撃
 		if(f.liveFlag) {
@@ -496,6 +513,9 @@ class GameManage
 		this.ImageView = document.getElementsByClassName("ImageView")[0];         // 画像表示用のビュー
 		this.Message = new Message(); // メッセージクラス
 		this.command = new Command(); // コマンドクラス
+		//this.HealthBar = new HealthBar(); // 体力バークラス
+		this.winFlag = false;         // 勝利フラグ
+		this.loseFlag = false;        // 敗北フラグ
 		
 		// 行動の順番を決める
 		this.actionOrder();
@@ -601,7 +621,11 @@ class GameManage
 	// 戦闘開始時のメッセージを表示する
 	showFirstMessage()
 	{
-		Message.printMessage("モンスターが現れた<br>");
+		for(let c in this.characters) {
+			if(this.characters[c].type === "enemy") {
+				Message.printMessage("「" + this.characters[c].name + "」を調理するぞ！<br>");
+			}
+		}
 	}
 
 	// 倒れたキャラクターを処理する
@@ -610,14 +634,15 @@ class GameManage
 		for(let c in this.characters) {
 			if(this.characters[c].hp <= 0 && this.characters[c].liveFlag === true) {
 
-				this.Message.addMessage(this.characters[c].name + "は倒れた<br>");
+				Message.addMessage(this.characters[c].name + "は倒れた<br>");
 				// 生存フラグを落とす
 				this.characters[c].liveFlag = false;
 
 				// 敵の場合は画像を削除
 				if(this.characters[c].type === "enemy") {
-					document.getElementsByClassName("enemyImage" + c)[0].remove();
-					
+					// 画像を削除
+					document.getElementById("enemyImage" + c).remove();
+
 					// 新しい画像を表示する  魚とかによって変更する関数追加の必要あり
 					this.ImageView.innerHTML += '<img id="enemyImage" src="../img/maguro.png" style="position:absolute; left:350px; bottom:50px">';
 					//this.ImageView.innerHTML += '<img id="enemyImage" src="../img/gyuniku.png" style="position:absolute; left:350px; bottom:50px">';
@@ -631,13 +656,17 @@ class GameManage
 	{
 		// 味方が残っていなければゲームオーバー
 		if(! isAliveByType(this.characters, "hero")) {
-			this.Message.addMessage("全滅しました・・・<br>");
+			Message.addMessage("全滅しました・・・<br>");
 			return "lose";
 		}
 
 		// 敵が残っていなければ勝利
 		if(! isAliveByType(this.characters, "enemy")) {
-			this.Message.addMessage("モンスターをやっつけた<br>");
+			for(let c in this.characters) {
+				if(this.characters[c].type === "enemy") {
+					Message.printMessage(this.characters[c].name + "は倒れた<br>");
+				}
+			}
 			return "win";
 		}
 
@@ -659,6 +688,7 @@ class GameManage
 			await sleep(900);
 
 			// 各キャラクターの行動
+			console.log(this.characters[c].name + "の行動");
 			this.characters[c].action();
 
 			await sleep(1100);
@@ -685,14 +715,16 @@ class GameManage
 				// 例えば、勝利画面を表示する場合
 				if (winLose === "win") {
 					// 勝利画面を表示する処理を書く
-					//マウスをクリックをするとDrawWinが呼ばれる
-					document.addEventListener("click", ResetGame);
 					console.log("You win!");
+					// 勝利したことを示すグローバル変数
+					this.winFlag = true;
 				} else {
 					// 敗北画面を表示する処理を書く
 					//マウスをクリックをするとDrawLoseが呼ばれる
 					document.addEventListener("click", ResetGame);
 					console.log("You lose...!");
+					// 敗北したことを示すグローバル変数
+					this.loseFlag = true;
 				}
 				return false;
 			}
@@ -753,11 +785,11 @@ class Command
 		// イベントハンドラを登録する
 		//this.characters[this.heroElementNum[this.current]].setEventHandler("start");
 	
-		if (!this.isCalledPreparation) {
+		//if (!this.isCalledPreparation) {
 			document.getElementById("attackCommand").addEventListener("click", (e) => this.callback(e));
 			document.getElementById("recoveryCommand").addEventListener("click", (e) => this.callback(e));
-			this.isCalledPreparation = true;
-		}
+		//	this.isCalledPreparation = true;
+		//}
 	}
 
 	// コマンドを表示する
@@ -773,6 +805,7 @@ class Command
 		console.log(event);
 		// 味方のコマンド選択
 		let result = this.commandTurn(event)
+		console.log(result);
 
 		// 味方全員のコマンド選択が終わった場合
 		if(result) {
@@ -782,8 +815,7 @@ class Command
 			// gameManage.battle()が終了したときに実行される
 			promise.then(
 				// boolは、gameManage.battle()の戻り値
-				function(bool)
-				{
+				(bool) => {
 					// 戦闘が終了していない場合、コマンドを表示する
 					if(bool) {
 						this.preparation();
@@ -803,7 +835,7 @@ class Command
 		if (result === "end") {
 
 			// コマンドを選択していない味方が残っている場合
-			if(! (this.current === this.heroElementNum.length - 1)) {
+			/*if(! (this.current === this.heroElementNum.length - 1)) {
 				// 次の味方
 				++this.current;
 				// 味方のコマンドを取得する
@@ -812,22 +844,40 @@ class Command
 				this.showCommand(text);
 				// 表示されたコマンドにイベントハンドラを割り当てる
 				this.characters[this.heroElementNum[this.current]].setEventHandler("start");
-			}
+			}*/
 			// 味方全員のコマンド選択が終わった場合
-			else {
+			//else {
 				// コマンドビューを空白にする
 				//this.commandView.innerHTML = "";
 				document.getElementsByClassName("commandView")[0].innerHTML = "";
 				this.current = 0;
 				return true;
-			}
+			//}
 		}
+
 		// 味方1人のコマンド入力が終わっていない場合
 		else {
+			console.log("bo");
 			// 次のコマンドを表示して、イベントハンドラを登録する
 			this.showCommand(result);
 			// 表示されたコマンドにイベントハンドラを割り当てる
 			//this.characters[this.heroElementNum[this.current]].setEventHandler();
+			// クラス名がenemyCommandの要素すべてにイベントハンドラを追加
+			let enemyCommands = document.getElementsByClassName("enemyCommand");
+			for (let i = 0; i < enemyCommands.length; i++) {
+				enemyCommands[i].addEventListener("click", (e) => this.callback(e));
+			}
+			// クラス名がpanchiCommandの要素すべてにイベントハンドラを追加
+			let panchiCommands = document.getElementsByClassName("panchiCommand");
+			for (let i = 0; i < panchiCommands.length; i++) {
+				panchiCommands[i].addEventListener("click", (e) => this.callback(e));
+			}
+			// クラス名がslashingCommandの要素すべてにイベントハンドラを追加
+			let slashingCommands = document.getElementsByClassName("slashingCommand");
+			for (let i = 0; i < slashingCommands.length; i++) {
+				slashingCommands[i].addEventListener("click", (e) => this.callback(e));
+			}
+			
 		}
 
 		return false;
@@ -851,6 +901,13 @@ class Message
 	{
 		document.getElementsByClassName("messageView")[0].innerHTML += text;
 		//messageView.innerHTML += text;
+	}
+
+	// メッセージを消去する
+	static clearMessage()
+	{
+		document.getElementsByClassName("messageView")[0].innerHTML = "";
+		//messageView.innerHTML = "";
 	}
 }
 
@@ -960,4 +1017,36 @@ function playBGM() {
     bgm.play()
         .then(() => console.log("BGMの再生を開始しました。"))
         .catch(error => console.error("BGMの再生に失敗しました。", error));
+}
+
+function ResetGame(){
+	// modalを消す
+	document.getElementById('modal').style.display = 'none';
+
+}
+
+// 敵の体力バーを変更する
+function alterLife_enemy(hp, maxHp) {
+    const lifeBars = document.getElementsByClassName("enemylife-bar");
+    if (lifeBars.length === 0) {
+        console.error("Error: enemylife-bar elements not found.");
+        return;
+    }
+    const widthPercentage = (hp / maxHp) * 100;
+    for (let i = 0; i < lifeBars.length; i++) {
+        lifeBars[i].style.width = `${widthPercentage}%`;
+    }
+}
+
+// 主人公の体力バーを変更する
+function alterLife_hero(hp, maxHp) {
+	const lifeBars = document.getElementsByClassName("herolife-bar");
+	if (lifeBars.length === 0) {
+		console.error("Error: herolife-bar elements not found.");
+		return;
+	}
+	const widthPercentage = (hp / maxHp) * 100;
+	for (let i = 0; i < lifeBars.length; i++) {
+		lifeBars[i].style.width = `${widthPercentage}%`;
+	}
 }

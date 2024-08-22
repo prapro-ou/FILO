@@ -7,15 +7,17 @@ class HealthBar {
 
         // ヒーローのライフバーの表示
         this.lifeBar_hero = document.getElementsByClassName('herolife-bar')[0]; // ライフバー
-        this.lifeMark_hero = document.getElementsByClassName('herolife-mark')[0]; // ライフの光部分
+        //this.lifeMark_hero = document.getElementsByClassName('lifeMark_hero')[0]; // ライフの光部分
         this.life_hero = 100; // ライフ初期値
-        this.lifeBar_hero.style.width = "100%"; // ライフ初期幅
+        this.lifeBar_hero.width = "100%"; // ライフ初期幅
+        console.log("hero hp : " + this.lifeBar_hero.width);
 
         // 敵のライフバーの表示
         this.lifeBar_enemy = document.getElementsByClassName('enemylife-bar')[0]; // ライフバー
-        this.lifeMark_enemy = document.getElementsByClassName('enemylife-mark')[0]; // ライフの光部分
+        //this.lifeMark_enemy = document.getElementsByClassName('enemylife-mark')[0]; // ライフの光部分
         this.life_enemy = 100; // ライフ初期値
-        this.lifeBar_enemy.style.width = "100%"; // ライフ初期幅
+        this.lifeBar_enemy.width = "100%"; // ライフ初期幅
+        console.log("enemy hp : " + this.lifeBar_enemy.width);
 
         // イベントリスナーの設定
         //this.setupEventListeners();
@@ -30,16 +32,16 @@ class HealthBar {
     }*/
 
     // *** ヒーローのライフ変更処理 ***
-    alterLife_hero(value) {
+    static alterLife_hero(value) {
         // lifeの値を算出する
         this.life_hero += value;
         if (this.life_hero <= 0) {
             // 算出の結果 0 以下になった場合
             this.life_hero = 0;
             // 0.3秒後に光部分を非表示にする
-            setTimeout(() => {
-                this.lifeMark_hero.style.visibility = 'hidden';
-            }, 300);
+            //setTimeout(() => {
+            //    this.lifeMark_hero.style.visibility = 'hidden';
+            //}, 300);
         } else {
             // 算出の結果 100 を超過した場合
             if (this.life_hero > 100) {
@@ -47,32 +49,63 @@ class HealthBar {
             }
         }
         // ライフバーの幅を更新
-        this.lifeBar_hero.style.width = `${this.life_hero}%`;
+        this.lifeBar_hero.width = `${this.life_hero}%`;
     }
 
     // *** 敵のライフ変更処理 ***
-    alterLife_enemy(value) {
+    static alterLife_enemy(enemy_hp) {
+        this.lifeBar_enemy = document.getElementsByClassName('enemylife-bar')[0]; // ライフバー
+        console.log(enemy_hp);
         // lifeの値を算出する
-        this.life_enemy += value;
+        /*this.life_enemy += value;
         if (this.life_enemy <= 0) {
             // 算出の結果 0 以下になった場合
             this.life_enemy = 0;
             // 0.3秒後に光部分を非表示にする
-            setTimeout(() => {
-                this.lifeMark_enemy.style.visibility = 'hidden';
-            }, 300);
+            //setTimeout(() => {
+            //    this.lifeMark_enemy.style.visibility = 'hidden';
+            //}, 300);
         } else {
             // 算出の結果 100 を超過した場合
             if (this.life_enemy > 100) {
                 this.life_enemy = 100;
             }
             // 光部分を表示する
-            this.lifeMark_enemy.style.visibility = 'visible';
+            //this.lifeMark_enemy.style.visibility = 'visible';
         }
         // スタイル(幅)を更新する
-        this.lifeBar_enemy.style.width = `${this.life_enemy}%`;
+        console.log(this.lifeBar_enemy);
+        this.lifeBar_enemy.width = `${this.life_enemy}%`;*/
+        this.lifeBar_enemy.width = enemy_hp + '%';
+        console.log("enemy hp : " + this.lifeBar_enemy.width);
     }
 }
+
+
+
+/* もうclassじゃなくてidで書いてもいいかも
+this.ImageView.innerHTML += `
+    <div id="herolife-frame">
+        <div id="herolife-bar"></div>
+        <div id="herolife-mark"></div>
+    </div>
+    <div id="enemylife-frame">
+        <div id="enemylife-bar"></div>
+        <div id="enemylife-mark"></div>
+    </div>
+    
+document.getElementById("herolife-bar").style.width = "100%";
+document.getElementById("enemylife-bar").style.width = "100%";
+
+的な感じで
+なんなら、hpbarがいらなくなるかもしれない*/
+
+
+
+
+
+
+
 
 
 /*

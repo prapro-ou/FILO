@@ -90,7 +90,7 @@ class MainScene extends Scene {
         field.setAttributeBySprite(0, 'obstacle');
         field.setAttributeBySprite(3, 'obstacle');
         field.setAttributeBySprite(3, 'refrigerator');
-        field.setAttributeBySprite(6, 'plate');
+        field.setAttributeBySprite(6, 'freezer');
         field.setAttributeBySprite(7, 'dish');
         field.shiftX(-4);
         field.shiftY(-2);
@@ -126,8 +126,39 @@ class MainScene extends Scene {
             const refrigerator = new Refrigerator(subCanvas);
             this.stackScene(refrigerator);
         }
+        /*const isFreezer = field.getAttribute(player.mapX + disMapX, player.mapY + disMapY).includes('freezer');
+        if (isFreezer && input.isKeyDown('Enter')) {
+            const subCanvas = new Canvas(CAN_WIDTH, CAN_HEIGHT, 'gameContainer');
+            console.log('open freezer');
+            const freezer = new Freezer(subCanvas);
+            this.stackScene(freezer);
+        }*/
     }
 }
+
+/*class Freezer extends Scene {
+    constructor(canvas) {
+        super(canvas, 'Freezer');
+
+        const view = new View(null, canvas);
+
+        const inputText = new TextInput(200, 100, 300, 30, 'Enter text');
+        view.add(inputText);
+
+        this.setView(view);
+    }
+
+    update() {
+        if (!super.update()) return;
+
+        const view = this.view;
+        const inputText = view.children[0];
+
+        if (input.isKeyDown('Enter')) {
+            console.log('Entered text:', inputText.text);
+        }
+    }
+}*/
 
 class Refrigerator extends Scene {
     constructor(canvas) {
@@ -144,7 +175,6 @@ class Refrigerator extends Scene {
                 gameContainer.remove();
             }
         }
-        
 
         // <canvas>要素を取得して削除
         const canvasElement = document.querySelector('canvas.gameContainer');
@@ -152,21 +182,60 @@ class Refrigerator extends Scene {
             canvasElement.remove();
         }
 
-
         const view = new View(null, canvas);
 
         console.log('open');
         //const commandbattle = new CommandBattle();
         // キャラクターをインスタンス化する
-            this.hero = new Hero("シェフ", 200, 50, 20, 3, 30, "../img/chef.png"  );  // 主人公
+            this.hero = new Hero("シェフ", 200, 50, 100, 3, 60, "../img/itamae4.png"  );  // 主人公
 
-            this.enemy  = new Fish("さかな", 100, 40, 10,       "../img/sakana.png");  // まぐろ
+            //this.enemy  = new Fish("まぐろ", 100, 40, 10,       "../img/maguro.png");  // まぐろ
+            this.enemy = new Mollusk("いか", 200, 50, 30,       "../img/ika.png");  // いか
+            this.item  = new Item("まぐろ", "../img/maguro_sashimi.png");      // まぐろ刺身
 
-            //this.enemy = new Meat("うし"  , 100, 40, 10,       "../img/usi.png"   );  // うし
+            // どっかで食材をとる場所が必要
+            // そこで食材ごとの変数を定義することで、食材を持っているかどうかを判定する
+            /*if ( syokuzai == "まぐろ" ){
+                // まぐろを持っているとき
+                this.enemy  = new Fish("まぐろ", 100, 40, 10,       "../img/maguro.png");  // まぐろ
 
-            this.item  = new Item("まぐろ", "../img/maguro.png");      // まぐろ刺身
+                this.item  = new Item("まぐろ", "../img/maguro_sashimi.png");      // まぐろ刺身
 
-            //this.item2 = new Item("牛肉"  , "../img/gyuniku.png");     // 牛肉
+            } else if ( syokuzai == "いか" ){
+                // いかを持っているとき
+                this.enemy  = new Mollusk("いか", 200, 50, 30,       "../img/ika.png");  // いか
+            
+                this.item  = new Item("いか", "../img/ika_sashimi.png");      // いか刺身
+            } else if ( syokuzai == "あじ" ){
+                // あじを持っているとき
+                this.enemy  = new Fish("あじ", 300, 200, 50,       "../img/aji.png");  // あじ
+            
+                this.item  = new Item("あじ", "../img/aji_sashimi.png");      // あじ刺身
+            } else if ( syokuzai == "えび" ){
+                // えびを持っているとき
+                this.enemy  = new Mollusk("えび", 400, 300, 70,       "../img/ebi.png");  // えび
+            
+                this.item  = new Item("えび", "../img/ebi_sashimi.png");      // えび刺身
+            } else if ( syokuzai == "サーモン" ){
+                // サーモンを持っているとき
+                this.enemy  = new Fish("サーモン", 500, 400, 90,       "../img/samon.png");  // サーモン
+            
+                this.item  = new Item("サーモン", "../img/samon_sashimi.png");      // サーモン刺身
+            } else if ( syokuzai == "たい" ){
+                // たいを持っているとき
+                this.enemy  = new Fish("たい", 600, 500, 110,       "../img/tai.png");  // たい
+            
+                this.item  = new Item("たい", "../img/tai_sashimi.png");      // たい刺身
+            } else if ( syokuzai == "とろ" ){
+                // とろを持っているとき
+                this.enemy  = new Fish("とろ", 700, 600, 130,       "../img/toro.png");  // とろ
+            
+                this.item  = new Item("とろ", "../img/toro_sashimi.png");      // とろ刺身
+            } else {
+                // 何も食材を持っていないとき
+                console.log('error');
+            }*/
+
 
             // キャラクター配列をつくる
             this.characters = [
@@ -182,19 +251,18 @@ class Refrigerator extends Scene {
         //this.characters.push(usi);      // 敵
         this.characters.push(enemy);     // 
         */
+
+        // ヘルスバーをインスタンス化する
+        this.HealthBar = new HealthBar();
     
         // ゲーム管理クラスをインスタンス化する
-        this.gameManage = new GameManage(this.characters);
+        this.gameManage = new GameManage(this.characters, this.HealthBar);
 
         // コマンドクラスをインスタンス化する
         this.command = new Command(this.characters, this.gameManage);
 
         // コマンド選択の準備を整える
         this.command.preparation();
-
-        // hpバーの表示
-        this.healthBar = new HealthBar();
-
 
         /*const titleText = new Text('冷蔵庫', F_TITLE, 30, '#000', 'bold');    
         titleText.center();
@@ -207,10 +275,17 @@ class Refrigerator extends Scene {
 
     update() {
         if (!super.update()) return;
-
-        if(input.isKeyDown('Shift')) {
+        // コマンドバトルで勝利ているかつシフトを押したとき
+        if(input.isKeyDown('Shift') && this.gameManage.winFlag) {
             this.close();
             this.destroy();
+            console.log('you got a maguro');
+        }
+        // コマンドバトルで敗北しているかつシフトを押したとき
+        if(input.isKeyDown('Shift') && this.gameManage.loseFlag) {
+            this.close();
+            this.destroy();
+            console.log('you lost a maguro');
         }
     }
 }
