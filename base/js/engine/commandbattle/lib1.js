@@ -232,14 +232,14 @@ class Hero
 				// 敵の体力から、自分の攻撃力を引く
 				this.target.hp -= this.offense;
 
-				Message.printMessage(this.name + "の波乗り<br>効果抜群だ！" + 
+				Message.printMessage(this.name + "の氷水をかける<br>効果抜群だ！" + 
 					this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
 			}
 			else if(this.target instanceof Mollusk) {
 				//let molluskhealth = this.offense;
 				this.target.hp -= this.offense*2;
 								
-				Message.printMessage(this.name + "の波乗り<br>" +
+				Message.printMessage(this.name + "の氷水をかける<br>" +
 					this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
 			}
     	    // 攻撃相手の体力がマイナスになる場合は、0にする

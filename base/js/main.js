@@ -187,7 +187,7 @@ class Refrigerator extends Scene {
         console.log('open');
         //const commandbattle = new CommandBattle();
         // キャラクターをインスタンス化する
-            this.hero = new Hero("シェフ", 200, 50, 100, 3, 60, "../img/itamae4.png"  );  // 主人公
+            this.hero = new Hero("シェフ", 200, 50, 100, 3, 60, "../img/itamae.png"  );  // 主人公
 
             //this.enemy  = new Fish("まぐろ", 100, 40, 10,       "../img/maguro.png");  // まぐろ
             this.enemy = new Mollusk("いか", 200, 50, 30,       "../img/ika.png");  // いか
