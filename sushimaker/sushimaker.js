@@ -56,7 +56,24 @@ switch (sushiType) {
         loadSushiGame("toro");
         currentSushiType= "toro";
         break;
-        
+    case "タイ":
+        loadSushiGame("tai");
+        currentSushiType= "tai";
+        break;    
+    case "トロサーモン":
+        loadSushiGame("torosalmon");
+        currentSushiType= "torosalmon";
+        break;          
+    case "アナゴ":
+        loadSushiGame("anago");
+        currentSushiType= "anago";
+        break;  
+    case "タマゴ":
+        loadSushiGame("tamago");
+        currentSushiType= "tamago";
+        break;  
+    
+    
     // 追加の寿司ネタに対応するケースを追加
     default:
         alert("その寿司ネタはありません。もう一度入力してください。");

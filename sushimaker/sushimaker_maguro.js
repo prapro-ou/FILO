@@ -1,4 +1,4 @@
-    (function() {    
+    (function makeMaguro() {    
         //落ちるスピード
         const DROP_SPEED = 200;
         const GAME_SPEED = 30;
@@ -8,7 +8,7 @@
         const FIELD_ROW = 23;
 
         //ブロック一つのサイズ（ピクセル）
-        const BLOCK_SIZE = 32;
+        const BLOCK_SIZE = 20;
 
         //キャンバスサイズ
         const SCREEN_W = BLOCK_SIZE * FIELD_COL;
@@ -170,7 +170,7 @@
             // 背景色を設定
             con.fillStyle = "#b8860b" // ここで好きな背景色を指定
             con.fillRect(0, 0, SCREEN_W, SCREEN_H);
-            
+
             //フィールドを描画する
             for (let y=0; y<FIELD_ROW; y++)
             {
@@ -294,6 +294,10 @@
             if (Good == 1){
                 img.src = '../sushi_img/sushi_nigiri_maguro.png'; // 表示する画像のパス
                 console.log("showImage");
+
+                // 効果音を再生
+                let audio = new Audio('../sushi_sound/cheer.mp3');
+                audio.play();
             } 
         }
 
@@ -321,7 +325,9 @@
                         Good = 1;
                         console.log("Good");
                     } else {
-                        //シャリにネタが乗らなかったときページをリロード
+                        //シャリにネタが乗らなかったとき効果音を鳴らし，restGAME()を呼び出す
+                        let crashAudio = new Audio('../sushi_sound/crash.mp3');
+                        crashAudio.play();
                         setTimeout(() => {
                             resetGame();
                         }, 1000); //一秒後にリロード
@@ -356,6 +362,9 @@
                     break; */
                 case 13: //Enter
                     set_drop();
+                    // 効果音を再生
+                    let dropAudio = new Audio('../sushi_sound/drop.mp3');
+                    dropAudio.play();
                     break;
             }
         }

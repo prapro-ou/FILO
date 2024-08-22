@@ -1,4 +1,4 @@
-    (function() {
+    (function makeSalmon() {
         //落ちるスピード
         const DROP_SPEED = 200;
         const GAME_SPEED = 30;
@@ -8,7 +8,7 @@
         const FIELD_ROW = 23;
 
         //ブロック一つのサイズ（ピクセル）
-        const BLOCK_SIZE = 32;
+        const BLOCK_SIZE = 20;
 
        //キャンバスサイズ
         const SCREEN_W = BLOCK_SIZE * FIELD_COL;
@@ -118,48 +118,69 @@
 
         
             //障害物に画像を割り当てる 後で適切に変更する
-            field[9][0] =9;
-            field[9][1] =9;
-
-            field[9][6] =9;
-            field[9][7] =9;
-
-            field[9][12] =9;
-            field[9][13] =9;
-
-            field[9][18] =9;
-            field[9][19] =9;
+            field[4][1] =9;
+            field[4][2] =9;
+    
+            field[4][7] =9;
+            field[4][8] =9;
             
-            field[9][24] =9;
-            field[9][25] =9;
-
-            field[9][30] =9;
-            field[9][31] =9;
+            field[4][13] =9;
+            field[4][12] =9;
+    
+            field[4][17] =9;
+            field[4][18] =9;
             
-            field[9][36] =9;
-            field[9][37] =9;
+            field[4][23] =9;
+            field[4][24] =9;
+    
+            field[4][29] =9;
+            field[4][30] =9;
+            
+            field[4][35] =9;
+            field[4][36] =9;
+    
+            field[10][0] =9;
+            field[10][1] =9;
+    
+            field[10][6] =9;
+            field[10][7] =9;
+    
+            field[10][12] =9;
+            field[10][13] =9;
+    
+            field[10][18] =9;
+            field[10][19] =9;
+            
+            field[10][24] =9;
+            field[10][25] =9;
+    
+            field[10][30] =9;
+            field[10][31] =9;
+            
+            field[10][36] =9;
+            field[10][37] =9;
             
             field[16][1] =9;
             field[16][2] =9;
-
+    
             field[16][7] =9;
             field[16][8] =9;
             
             field[16][13] =9;
             field[16][12] =9;
-
+    
             field[16][17] =9;
             field[16][18] =9;
             
             field[16][23] =9;
             field[16][24] =9;
-
+    
             field[16][29] =9;
             field[16][30] =9;
             
             field[16][35] =9;
             field[16][36] =9;
-
+    
         }
 
         //ブロック一つを描画する
@@ -308,10 +329,17 @@
                 // 画像が読み込まれたら描画
                 context.drawImage(img, (BLOCK_SIZE*FIELD_COL)/2-35, (BLOCK_SIZE*FIELD_ROW)/2-15, BLOCK_SIZE*3, BLOCK_SIZE*3);
             };
+
+            
+
             // シャリにネタが乗ったとき
             if (Good == 1){
                 img.src = '../sushi_img/sushi_nigiri_salmon.png'; // 表示する画像のパス
                 console.log("showImage");
+
+                // 効果音を再生
+                let audio = new Audio('../sushi_sound/cheer.mp3');
+                audio.play();
             } 
         }
 
@@ -337,7 +365,9 @@
                         Good = 1;
                         console.log("Good");
                     } else {
-                        //シャリにネタが乗らなかったときrestGAME()を呼び出す
+                        //シャリにネタが乗らなかったとき効果音を鳴らし，restGAME()を呼び出す
+                        let crashAudio = new Audio('../sushi_sound/crash.mp3');
+                        crashAudio.play();
                         setTimeout(() => {
                             resetGame();
                         }, 1000); //一秒後にリセット
@@ -367,6 +397,9 @@
                     break;
                 case 13: //Enter
                     set_drop();
+                    // 効果音を再生
+                    let dropAudio = new Audio('../sushi_sound/drop.mp3');
+                    dropAudio.play();
                     break;
             }
         }

@@ -1,14 +1,14 @@
-    (function() {        
+    (function makeToro() {        
         //落ちるスピード
-        const DROP_SPEED = 200;
-        const GAME_SPEED = 30;
+        const DROP_SPEED = 130;
+        const GAME_SPEED = 20;
 
         //フィールドサイズ
         const FIELD_COL = 40;
         const FIELD_ROW = 23;
 
         //ブロック一つのサイズ（ピクセル）
-        const BLOCK_SIZE = 32;
+        const BLOCK_SIZE = 20;
 
         //キャンバスサイズ
         const SCREEN_W = BLOCK_SIZE * FIELD_COL;
@@ -117,66 +117,158 @@
             field[22][22] =8;
 
             //障害物に画像を割り当てる 後で適切に変更する
-            field[4][4] =9;
-            field[4][5] =9;
-
+            field[4][0] =9;
+            field[4][6] =9;
+            field[4][7] =9;
+            field[4][8] =9;
+            field[4][9] =9;
+            field[4][10] =9;
             field[4][11] =9;
             field[4][12] =9;
-
+            field[4][13] =9;
+            field[4][14] =9;
+            field[4][15] =9;
+            field[4][16] =9;
+            field[4][17] =9;
             field[4][18] =9;
             field[4][19] =9;
-
+            field[4][20] =9;
+            field[4][21] =9;
+            field[4][22] =9;
+            field[4][23] =9;
+            field[4][24] =9;
             field[4][25] =9;
             field[4][26] =9;
-
+            field[4][27] =9;
+            field[4][28] =9;
+            field[4][29] =9;
+            field[4][30] =9;
+            field[4][31] =9;
             field[4][32] =9;
             field[4][33] =9;
+            field[4][34] =9;
+            field[4][35] =9;
+            field[4][36] =9;
+            field[4][37] =9;
+            field[4][38] =9;
+            field[4][39] =9;
 
-            field[9][2] =9;
-            field[9][3] =9;
-            
-            field[9][9] =9;
-            field[9][10] =9;
+            field[8][0] =9;
+            field[8][1] =9;
+            field[8][2] =9;
 
-            field[9][16] =9;
-            field[9][17] =9;
+            field[7][10] =9;
+            field[7][11] =9;
+            field[7][12] =9;
+            field[7][13] =9;
+            field[7][14] =9;
+            field[7][15] =9;
+            field[7][16] =9;
+            field[7][17] =9;
+            field[7][18] =9;
+            field[7][19] =9;
 
-            field[9][23] =9;
-            field[9][24] =9;
+            field[12][0] =9;
+            field[12][1] =9;
+            field[12][2] =9;
+            field[12][3] =9;
+            field[12][4] =9;
+            field[12][5] =9;
+            field[12][6] =9;
+            field[12][7] =9;
 
-            field[9][30] =9;
-            field[9][31] =9;
+            field[12][12] =9;
+            field[12][13] =9;
+            field[12][14] =9;
+            field[12][15] =9;
+            field[12][16] =9;
+            field[12][17] =9;
+            field[12][18] =9;
+            field[12][19] =9;
+            field[12][20] =9;
+            field[12][21] =9;
+            field[12][22] =9;
+            field[12][23] =9;
+            field[12][24] =9;
+            field[12][25] =9;
+            field[12][26] =9;
+            field[12][27] =9;
+            field[12][28] =9;
+            field[12][29] =9;
+            field[12][30] =9;
+            field[12][31] =9;
+            field[12][32] =9;
+            field[12][33] =9;
+            field[12][34] =9;
+            field[12][35] =9;
+            field[12][36] =9;
+            field[12][37] =9;
+            field[12][38] =9;
+            field[12][39] =9;
 
-            field[9][37] =9;
-            field[9][38] =9;
-            field[9][39] =9;
+            field[14][15] =9;
+            field[14][16] =9;
+            field[14][17] =9;
 
-            field[14][4] =9;
-            field[14][5] =9;
+            field[16][23] =9;
+            field[16][24] =9;
+            field[16][25] =9;
+            field[16][26] =9;
+            field[16][27] =9;
+            field[16][28] =9;
+            field[16][29] =9;
+            field[16][30] =9;
+            field[16][31] =9;
+            field[16][32] =9;
+            field[16][33] =9;
+            field[16][34] =9;
+            field[16][35] =9;
+            field[16][36] =9;
+            field[16][37] =9;
+            field[16][38] =9;
+            field[16][39] =9;
 
-            field[14][11] =9;
-            field[14][12] =9;
+            field[10][33] =9;
+            field[10][34] =9;
+            field[10][35] =9;
 
-            field[14][18] =9;
-            field[14][19] =9;
+            field[17][0] =9;
+            field[17][1] =9;
+            field[17][2] =9;
+            field[17][3] =9;
+            field[17][4] =9;
+            field[17][5] =9;
+            field[17][6] =9;
+            field[17][7] =9;
+            field[17][8] =9;
+            field[17][9] =9;
+            field[17][10] =9;
 
-            field[14][25] =9;
-            field[14][26] =9;
+            field[17][20] =9;
+            field[17][21] =9;
+            field[17][22] =9;
 
-            field[14][32] =9;
-            field[14][33] =9;
+            field[20][2] =9;
+            field[20][3] =9;
+            field[20][4] =9;
+            field[20][5] =9;
+            field[20][6] =9;
+            field[20][7] =9;
+            field[20][8] =9;
+            field[20][9] =9;
+            field[20][10] =9;
+            field[20][11] =9;
+            field[20][12] =9;
+            field[20][13] =9;
+            field[20][14] =9;
+            field[20][15] =9;
 
-            field[19][8] =9;
-            field[19][9] =9;
 
-            field[19][14] =9;
-            field[19][15] =9;
-
+            field[19][27] =9;
             field[19][28] =9;
             field[19][29] =9;
+            field[19][30] =9;
 
-            field[19][35] =9;
-            field[19][36] =9;
         }
 
         //ブロック一つを描画する
@@ -205,7 +297,7 @@
             // 背景色を設定
             con.fillStyle = "#b8860b" // ここで好きな背景色を指定
             con.fillRect(0, 0, SCREEN_W, SCREEN_H);
-            
+
             //フィールドを描画する
             for (let y=0; y<FIELD_ROW; y++)
             {
@@ -329,6 +421,10 @@
             if (Good == 1){
                 img.src = '../sushi_img/sushi_nigiri_toro.png'; // 表示する画像のパス
                 console.log("showImage");
+
+                // 効果音を再生
+                let audio = new Audio('../sushi_sound/cheers.mp3');
+                audio.play();
             } 
         }
 
@@ -356,7 +452,9 @@
                         Good = 1;
                         console.log("Good");
                     } else {
-                        //シャリにネタが乗らなかったときページをリロード
+                        //シャリにネタが乗らなかったとき効果音を鳴らし，restGAME()を呼び出す
+                        let crashAudio = new Audio('../sushi_sound/crash.mp3');
+                        crashAudio.play();
                         setTimeout(() => {
                             resetGame();
                         }, 1000); //一秒後にリロード
@@ -386,6 +484,9 @@
                     break;
                 case 13: //Enter
                     set_drop();
+                    // 効果音を再生
+                    let dropAudio = new Audio('../sushi_sound/drop.mp3');
+                    dropAudio.play();
                     break;
             }
         }
