@@ -232,14 +232,14 @@ class Hero
 				// 敵の体力から、自分の攻撃力を引く
 				this.target.hp -= this.offense;
 
-				Message.printMessage(this.name + "の氷水をかける<br>効果抜群だ！" + 
+				Message.printMessage(this.name + "の水をかける<br>" + 
 					this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
 			}
 			else if(this.target instanceof Mollusk) {
 				//let molluskhealth = this.offense;
 				this.target.hp -= this.offense*2;
 								
-				Message.printMessage(this.name + "の氷水をかける<br>" +
+				Message.printMessage(this.name + "の波乗り<br>効果抜群だ！" +
 					this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
 			}
     	    // 攻撃相手の体力がマイナスになる場合は、0にする
@@ -380,7 +380,7 @@ class Hero
 class Enemy
 {
 	// コンストラクタ
-	constructor(name, maxHp, offense, speed, path)
+	constructor(name, maxHp, offense, speed, path, itempath)
 	{
 		this.name = name;        // 名前
 		this.type = "enemy";     // 敵味方種別
@@ -390,6 +390,7 @@ class Enemy
 		this.offense = offense;  // 攻撃力
 		this.speed = speed;      // 素早さ
 		this.path = path         // 画像の場所
+		this.itempath = itempath // アイテムの画像の場所
 		this.characters = "";    // キャラクター配列
 	}
 
@@ -415,9 +416,9 @@ class Enemy
 class Fish extends Enemy
 {
 	// コンストラクタ
-	constructor(name, hp, offense, speed, path)
+	constructor(name, hp, offense, speed, path, itempath)
 	{
-		super(name, hp, offense, speed, path);
+		super(name, hp, offense, speed, path, itempath);
 	}
 
 	// 攻撃メソッド
@@ -454,9 +455,9 @@ class Fish extends Enemy
 class Mollusk extends Enemy
 {
 	// コンストラクタ
-	constructor(name, hp, offense, speed, path)
+	constructor(name, hp, offense, speed, path, itempath)
 	{
-		super(name, hp, offense, speed, path);
+		super(name, hp, offense, speed, path, itempath);
 	}
 
 	// 攻撃メソッド
@@ -495,7 +496,7 @@ class Item extends Enemy
 	// コンストラクタ
 	constructor(name, path)
 	{
-		super(name, 0, 0, 0, path);
+		super(name, 0, 0, 1000, path);
 	}
 }
 
@@ -544,6 +545,12 @@ class GameManage
 		document.addEventListener('keydown', (event) => {
 			if(event.key === 'm') {
 				this.playBGM();
+			}
+		});
+		// nを押すとBGMが止まる
+		document.addEventListener('keydown', (event) => {
+			if(event.key === 'n') {
+				this.stopBGM();
 			}
 		});
 	}
@@ -634,7 +641,6 @@ class GameManage
 		for(let c in this.characters) {
 			if(this.characters[c].hp <= 0 && this.characters[c].liveFlag === true) {
 
-				Message.addMessage(this.characters[c].name + "は倒れた<br>");
 				// 生存フラグを落とす
 				this.characters[c].liveFlag = false;
 
@@ -642,9 +648,12 @@ class GameManage
 				if(this.characters[c].type === "enemy") {
 					// 画像を削除
 					document.getElementById("enemyImage" + c).remove();
+					
+					// 敵のitempathを表示
+					this.ImageView.innerHTML += '<img id="itemImage" src="' + this.characters[c].itempath + '" style="position:absolute; left:300px; bottom:0px">';
 
 					// 新しい画像を表示する  魚とかによって変更する関数追加の必要あり
-					this.ImageView.innerHTML += '<img id="enemyImage" src="../img/maguro.png" style="position:absolute; left:350px; bottom:50px">';
+					//this.ImageView.innerHTML += '<img id="enemyImage" src="../img/maguro.png" style="position:absolute; left:350px; bottom:50px">';
 					//this.ImageView.innerHTML += '<img id="enemyImage" src="../img/gyuniku.png" style="position:absolute; left:350px; bottom:50px">';
 				}
 			}
@@ -1017,6 +1026,16 @@ function playBGM() {
     bgm.play()
         .then(() => console.log("BGMの再生を開始しました。"))
         .catch(error => console.error("BGMの再生に失敗しました。", error));
+}
+
+// BGMを停止する関数
+function stopBGM() {
+	// Audioオブジェクトを作成し、BGMファイルのパスを指定
+	var bgm = new Audio('../music/battle1.mp3');
+	
+	// BGMを停止
+	bgm.pause();
+	bgm.currentTime = 0;
 }
 
 function ResetGame(){

@@ -126,13 +126,6 @@ class MainScene extends Scene {
             const refrigerator = new Refrigerator(subCanvas);
             this.stackScene(refrigerator);
         }
-        /*const isFreezer = field.getAttribute(player.mapX + disMapX, player.mapY + disMapY).includes('freezer');
-        if (isFreezer && input.isKeyDown('Enter')) {
-            const subCanvas = new Canvas(CAN_WIDTH, CAN_HEIGHT, 'gameContainer');
-            console.log('open freezer');
-            const freezer = new Freezer(subCanvas);
-            this.stackScene(freezer);
-        }*/
     }
 }
 
@@ -187,51 +180,44 @@ class Refrigerator extends Scene {
         console.log('open');
         //const commandbattle = new CommandBattle();
         // キャラクターをインスタンス化する
-            this.hero = new Hero("シェフ", 200, 50, 100, 3, 60, "../img/itamae.png"  );  // 主人公
+            this.hero = new Hero("シェフ", 200, 50, 100, 3, 60, "../img/itamae5.png"  );  // 主人公
 
-            //this.enemy  = new Fish("まぐろ", 100, 40, 10,       "../img/maguro.png");  // まぐろ
-            this.enemy = new Mollusk("いか", 200, 50, 30,       "../img/ika.png");  // いか
-            this.item  = new Item("まぐろ", "../img/maguro_sashimi.png");      // まぐろ刺身
+            //this.enemy  = new Fish("まぐろ", 200, 70, 10,       "../img/maguro.png", "../img/toro_sashimi.png");  // まぐろ
+            this.enemy = new Mollusk("いか", 100, 50, 30,       "../img/ika.png", "../img/ika_sashimi.png");  // いか
 
             // どっかで食材をとる場所が必要
             // そこで食材ごとの変数を定義することで、食材を持っているかどうかを判定する
             /*if ( syokuzai == "まぐろ" ){
                 // まぐろを持っているとき
-                this.enemy  = new Fish("まぐろ", 100, 40, 10,       "../img/maguro.png");  // まぐろ
-
-                this.item  = new Item("まぐろ", "../img/maguro_sashimi.png");      // まぐろ刺身
-
+                this.enemy  = new Fish("まぐろ", 100, 40, 10,       "../img/maguro.png", "../img/maguro_sashimi.png");  // まぐろ
             } else if ( syokuzai == "いか" ){
                 // いかを持っているとき
-                this.enemy  = new Mollusk("いか", 200, 50, 30,       "../img/ika.png");  // いか
-            
-                this.item  = new Item("いか", "../img/ika_sashimi.png");      // いか刺身
+                this.enemy  = new Mollusk("いか", 200, 50, 30,       "../img/ika.png", "../img/ika_sashimi.png");  // いか
             } else if ( syokuzai == "あじ" ){
                 // あじを持っているとき
-                this.enemy  = new Fish("あじ", 300, 200, 50,       "../img/aji.png");  // あじ
-            
-                this.item  = new Item("あじ", "../img/aji_sashimi.png");      // あじ刺身
+                this.enemy  = new Fish("あじ", 100, 60, 50,       "../img/aji.png", "../img/aji_sashimi.png");  // あじ
             } else if ( syokuzai == "えび" ){
                 // えびを持っているとき
-                this.enemy  = new Mollusk("えび", 400, 300, 70,       "../img/ebi.png");  // えび
-            
-                this.item  = new Item("えび", "../img/ebi_sashimi.png");      // えび刺身
+                this.enemy  = new Mollusk("えび", 80, 120, 70,       "../img/ebi.png", "../img/ebi_sashimi.png");  // えび
             } else if ( syokuzai == "サーモン" ){
                 // サーモンを持っているとき
-                this.enemy  = new Fish("サーモン", 500, 400, 90,       "../img/samon.png");  // サーモン
-            
-                this.item  = new Item("サーモン", "../img/samon_sashimi.png");      // サーモン刺身
+                this.enemy  = new Fish("サーモン", 150, 70, 90,       "../img/salmon.png", "../img/salmon_sashimi.png");  // サーモン
             } else if ( syokuzai == "たい" ){
                 // たいを持っているとき
-                this.enemy  = new Fish("たい", 600, 500, 110,       "../img/tai.png");  // たい
-            
-                this.item  = new Item("たい", "../img/tai_sashimi.png");      // たい刺身
+                this.enemy  = new Fish("たい", 250, 70, 10,       "../img/tai.png", "../img/tai_sashimi.png");  // たい
             } else if ( syokuzai == "とろ" ){
                 // とろを持っているとき
-                this.enemy  = new Fish("とろ", 700, 600, 130,       "../img/toro.png");  // とろ
-            
-                this.item  = new Item("とろ", "../img/toro_sashimi.png");      // とろ刺身
-            } else {
+                this.enemy  = new Fish("とろ", 300, 40, 10,       "../img/maguro.png", "../img/toro_sashimi.png");  // とろ
+            } else if ( syokuzai == "たまご"){ 
+                // たまごを持っているとき
+                this.enemy  = new Mollusk("たまご", 60, 150, 10,       "../img/tamago.png", "../img/tamago_sashimi.png");  // たまご
+            } else if ( syokuzai == "あなご" ){
+                // あなごを持っているとき
+                this.enemy  = new Mollusk("あなご", 200, 40, 10,       "../img/anago.png", "../img/anago_sashimi.png");  // あなご
+            } else if ( syokuzai == "とろサーモン" ){
+                // とろサーモンを持っているとき
+                this.enemy  = new Fish("とろサーモン", 200, 70, 10,       "../img/salmon.png", "../img/torosalmon_sashimi.png");  // とろサーモン
+           } else {
                 // 何も食材を持っていないとき
                 console.log('error');
             }*/
