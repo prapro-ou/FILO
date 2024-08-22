@@ -1,0 +1,604 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: grid;
+    place-content: center;
+    height: 95vh;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(208, 147, 82, 0.6),
+            rgba(192, 134, 70, 0.6) 60%,
+            rgba(208, 147, 82, 0.6)
+        ),
+        repeating-radial-gradient(
+            ellipse at 60% 500%,
+            #c08646,
+            #c08646 0.2%,
+            #d09352 0.6%,
+            #d09352 1%
+        );
+}
+
+#game__container {
+    position: relative;
+    width: 800px;
+    height: 500px;
+    background: #333;
+    overflow: hidden;
+    
+}
+
+canvas {
+    display: block;
+}
+
+.titleCanvas, .resultCanvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mainCanvas {
+    margin: 0 auto;
+    border: 2px solid #000;
+}
+
+.subCanvas {
+    margin: 0 auto;
+    border: 3px solid #000;
+}
+
+.loading-msg span::before {
+    position: absolute;
+    top: 240px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 30px;
+    color: #fff;
+    animation-name: loading;
+    animation-duration: 3s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+}
+
+.l1::before {
+    content: 'L';
+    left: 300px;
+    animation-delay: .2s;
+}
+
+.l2::before {
+    content: 'o';
+    left: 320px;
+    animation-delay: .3s;
+}
+
+.l3::before {
+    content: 'a';
+    left: 340px;
+    animation-delay: .4s;
+}
+
+.l4::before {
+    content: 'd';
+    left: 360px;
+    animation-delay: .5s;
+}
+
+.l5::before {
+    content: 'i';
+    left: 385px;
+    animation-delay: .6s;
+}
+
+.l6::before {
+    content: 'n';
+    left: 400px;
+    animation-delay: .7s;
+}
+
+.l7::before {
+    content: 'g';
+    left: 420px;
+    animation-delay: .8s;
+}
+
+.l8::before {
+    content: '.';
+    left: 440px;
+    animation-delay: .9s;
+}
+
+.l9::before {
+    content: '.';
+    left: 460px;
+    animation-delay: 1s;
+}
+
+.l10::before {
+    content: '.';
+    left: 480px;
+    animation-delay: 1.1s;
+}
+
+@keyframes loading {
+    0% {
+        transform: translateY(0);
+    }
+    10% {
+        transform: translateY(50%);
+    }
+    20% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.info__container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 544px;
+    height: 50px;
+    margin: 0 auto;
+    margin-top: 40px;
+    font-size: 16px;
+    border: 2px solid #000;
+    background: #e9c65d;
+}
+
+.timer__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    border-right: 3px solid #43270a;
+}
+
+.quota__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+}
+
+.inventory {
+    margin: 0 auto;
+    margin-top: 15px;
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    border: 5px solid #676767;
+    box-shadow: inset 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+}
+
+.timer_text, .quota_text {
+    font-size: .7em;
+}
+
+.curtain-left, .curtain-right {
+    background:  #f0f2d2;
+    position: absolute;
+    z-index: 2;
+    width: 50%;
+    height: 100%;
+    top: 0;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.curtain-left {
+    border-right: 15px solid #3d7b51;
+}
+
+.curtain-right {
+    left: 50%;
+    border-left: 15px solid #3d7b51;
+}
+
+.curtain-left::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #6c6c6c;
+    border: 5px solid #000;
+    border-radius: 50%;
+    top: 50%;
+    left: 80%;
+    transform: translateX(50%);
+}
+
+.curtain-right::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #6c6c6c;
+    border: 5px solid #000;
+    border-radius: 50%;
+    top: 50%;
+    right: 80%;
+    transform: translateX(-50%);
+}
+
+.curtain-left.close {
+    animation-name: curtainLeftClose;
+}
+.curtain-right.close {
+    animation-name: curtainRightClose;
+}
+
+.curtain-left.open {
+    animation-name: curtainLeftOpen;
+}
+.curtain-right.open {
+    animation-name: curtainRightOpen;
+}
+
+@keyframes curtainLeftOpen {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes curtainRightOpen {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes curtainLeftClose {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes curtainRightClose {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+.clear-msg {
+    display: none;
+    position: absolute;
+    width: fit-content;
+    color: #ea4c4c;
+    font-weight: bold;
+    z-index: 3;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 70px;
+    animation-duration: 1.2s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.clear-msg.appear {
+    display: block;
+    animation-name: zoomIn;
+}
+
+@keyframes zoomIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    } 
+}
+
+.refrigirator__wrapper {
+    width: 500px;
+    height: 300px;
+    text-align: center;
+    background-color: #010927;
+    background-image: radial-gradient(circle at 10px 10px, 
+        rgba(255, 255, 255, 0.5) 0px, 
+        rgba(255, 255, 255, 0.5) 3px, 
+        transparent 3px), 
+    radial-gradient(circle at 35px 35px, 
+        rgba(255, 255, 255, 0.7) 0px, 
+        rgba(255, 255, 255, 0.7) 6px, 
+        transparent 6px);
+    background-size: 80px 80px;
+    background-repeat: repeat;
+    animation-name: snowing;
+    animation-timing-function: linear;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+}
+
+.question {
+    padding-top: 40px;
+    font-size: 35px;
+    font-weight: bold;
+    color: #5fc0e5;
+}
+
+.text-input {
+    display: block;
+    text-align: center;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 40px;
+}
+
+.text-input:focus {
+    outline: none;
+}
+                   
+@keyframes snowing {
+    0% {
+        background-position: 0% 0px;
+    }
+    50% {
+        background-position: 5% 40px;
+    }
+    100% {
+        background-position: 0% 80px;
+    }
+}
+
+.js-hidden {
+    display: none;
+}
+
+/* Modal style */
+.js-modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.js-modal.open {
+    display: block;
+}
+
+.js-modal__bg {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(30,30,30,0.65);
+}
+
+
+.js-modal__wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* CommandBattle */
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(0%);
+        background-color: transparent;
+    }
+    to {
+        transform: translateX(0);
+        background-color: #333333;
+    }
+}
+
+.battleAnimation {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    animation: slideInFromRight 2s;
+}
+
+/* 親コンテナ */
+.gameContainer {
+    display: flex;
+    width: 960px;
+    height: 540px;
+    flex-direction: column; /* 子要素を縦に並べる */
+    align-items: center; /* 子要素を中央に配置 */
+    background-image: url("../img/Sushiya.png"); /* 背景画像を設定 */
+    background-size: cover; /* 背景画像をコンテナに合わせて表示 */
+    margin: 0 auto; /* コンテナを中央に配置 */
+}
+
+/* パラメータビュー */
+.parameterView {
+    display: flex;
+    width: 520px;
+    text-align: left;
+    margin: 5px 0px 0px 0px;
+    padding: 8px 0px 10px 20px;
+    border: 3px solid;
+    border-color: white;
+    border-radius: 6px;
+    background-color: white;
+}
+
+/* パラメータ（各キャラクター） */
+.parameter {
+    display: inline-block;
+    width: 250px;
+    vertical-align: top;
+}
+div {
+    background-image: none;
+}
+
+/* 主人公と敵の画像ビューを含むコンテナ */
+.imageContainer {
+    display: flex;
+    justify-content: space-around; /* 要素間にスペースを配置 */
+    align-items: center; /* 縦方向のセンタリング */
+    margin: 5px 0; /* コンテナの上下マージン */
+}
+
+/* 主人公画像ビュー  */
+/*.heroImageView {
+    width: 300px;
+    height: 240px;
+    border: 3px solid;
+    border-color: red;
+    border-radius: 6px;
+}*/
+
+/* 敵画像ビュー */
+/*.enemyImageView {
+    width: 300px;
+    height: 240px;
+    border: 3px solid;
+    border-color: blue;
+    border-radius: 6px;
+}*/
+
+/* 主人公と敵画像ビュー  */
+.ImageView {
+    width: 600px;
+    height: 240px;
+    border: 3px solid;
+    border-color: green;
+    border-radius: 6px;
+}
+
+
+/* コマンドビューとメッセージビューを含むコンテナ */
+.CMContainer {
+    display: flex;
+    justify-content: space-around; /* 要素間にスペースを配置 */
+    align-items: center; /* 縦方向のセンタリング */
+    margin: 5px 0; /* コンテナの上下マージン */
+}
+
+/* コマンドビュー */
+.commandView {
+    display: inline-block;
+    width: 108px;
+    height: 150px;
+    text-align: left;
+    vertical-align: top;
+    margin: 0px 0px 20px 0px;
+    padding: 10px 20px 10px 10px;
+    border: 3px solid;
+    border-color: white;
+    border-radius: 6px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: white;
+}
+
+/* メッセージビュー */
+.messageView {
+    display: inline-block;
+    width: 370px;
+    height: 150px;
+    text-align: left;
+    vertical-align: top;
+    margin: 0px 0px 20px 4px;
+    padding: 10px 0px 10px 20px;
+    border: 3px solid;
+    border-color: white;
+    border-radius: 6px;
+    background-color: white;
+}
+
+/* 各コマンド */
+#attackCommand:hover,
+#recoveryCommand:hover,
+.enemyCommand:hover,
+.panchiCommand:hover,
+.slashingCommand:hover {
+    cursor: pointer;
+}
+
+/* 各コマンド */
+#attackCommand::before,
+#recoveryCommand::before,
+.enemyCommand::before,
+.panchiCommand::before,
+.slashingCommand::before {
+    /* 透明な▶を各コマンドの左に追加 */
+    content: "▶";
+    opacity: 0;
+}
+
+/* 各コマンド */
+#attackCommand:hover::before,
+#recoveryCommand:hover::before,
+.enemyCommand:hover::before,
+.panchiCommand:hover::before,
+.slashingCommand:hover::before {
+    /* マウスオーバーで▶を表示 */
+    opacity: 100;
+}
+
+/* コマンドの味方の名前 */
+#heroName::before {
+    /* インデント調整のため
+       透明な▶を名前の左に追加 */
+    content: "▶";
+    opacity: 0;
+}
+
+.herolife-frame {
+    position: absolute; 
+    bottom: 10px;
+    left: 10px;
+    width: 100px;
+    background-color: rgba(10, 0, 50, 0.6);
+    display: flex;
+    padding: 3px 3px;
+}
+
+.herolife-bar {
+    width: 100%;
+    height: 3px;
+    background-color: rgb(0, 255, 255);
+    transition: 300ms
+}
+
+.enemylife-frame {
+    position: absolute; 
+    top: 10px;
+    right: 10px;
+    width: 100px;
+    background-color: rgba(10, 0, 50, 0.6);
+    display: flex;
+    padding: 3px 3px;
+}
+
+.enemylife-bar {
+    width: 100%;
+    height: 3px;
+    background-color: rgb(255, 0, 0);
+    transition: 300ms
+}

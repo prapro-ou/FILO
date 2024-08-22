@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="./styles/style.css">
+        <title>SUSHI KING</title>
+    </head>
+    <body>
+        <div id="game__container">
+            <div class="info__container js-hidden">
+                <div class="timer__wrapper">
+                    <div class="timer_text">TIME</div>
+                    <div class="js-timer"></div>
+                </div>
+                <div class="quota__wrapper">
+                    <div class="quota_text">CUSTOMER</div>
+                    <div class="js-quota"></div>
+                </div>
+            </div>
+            <div id="main-can__wrapper"></div>
+            <canvas class="inventory js-hidden" width="50" height="50"></canvas>
+            <div class="curtain-left open"></div>
+            <div class="curtain-right open"></div>
+            <div class="loading-msg">
+                <span class="l1"></span>
+                <span class="l2"></span>
+                <span class="l3"></span>
+                <span class="l4"></span>
+                <span class="l5"></span>
+                <span class="l6"></span>
+                <span class="l7"></span>
+                <span class="l8"></span>
+                <span class="l9"></span>
+                <span class="l10"></span>
+            </div>
+            <div class="clear-msg">CLEAR!</div>
+        </div>
+        <script src="./js/constants.js"></script>
+        <script src="./js/helper.js"></script>
+        <script src="./js/engine/assetLoader.js"></script>
+        <script src="./js/engine/inputManager.js"></script>
+        <script src="./js/engine/rectangle.js"></script>
+        <script src="./js/engine/sprite.js"></script>
+        <script src="./js/engine/canvas.js"></script>
+        <script src="./js/engine/event.js"></script>
+        <script src="./js/engine/entity.js"></script>
+        <script src="./js/engine/character.js"></script>
+        <script src="./js/engine/text.js"></script>
+        <script src="./js/engine/field.js"></script>
+        <script src="./js/engine/view.js"></script>
+        <script src="./js/engine/scene.js"></script>
+        <script src="./js/engine/modal.js"></script>
+        <script src="./js/engine/game.js"></script>
+        <script src="./js/sushimaker/sushimaker.js"></script>
+        <script src="./js/sushimaker/sushimaker_aji.js"></script>
+        <script src="./js/sushimaker/sushimaker_anago.js"></script>
+        <script src="./js/sushimaker/sushimaker_ebi.js"></script>
+        <script src="./js/sushimaker/sushimaker_ika.js"></script>
+        <script src="./js/sushimaker/sushimaker_maguro.js"></script>
+        <script src="./js/sushimaker/sushimaker_salmon.js"></script>
+        <script src="./js/sushimaker/sushimaker_tai.js"></script>
+        <script src="./js/sushimaker/sushimaker_tamago.js"></script>
+        <script src="./js/sushimaker/sushimaker_toro.js"></script>
+        <script src="./js/sushimaker/sushimaker_torosalmon.js"></script>
+        <script src="./js/engine/commandbattle/game1.js"></script>
+        <script src="./js/engine/commandbattle/lib1.js"></script>
+        <script src="./js/engine/commandbattle/hpbar1.js"></script>
+        <script src="./js/engine/commandbattle/classkari.js"></script>
+        <script src="./js/main.js"></script>
+    </body>
+</html>
