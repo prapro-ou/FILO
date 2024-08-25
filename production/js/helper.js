@@ -72,3 +72,26 @@ function hideMsg(msg) {
     document.getElementsByClassName('clear-msg')[0].classList.remove('appear');
     // document.getElementsByClassName('clear-msg')[0].classList.add('hidden');
 }
+
+function openClearOverlay(clearTime) {
+    const container = document.querySelector('.confetti-container');
+    const confettiElements = container.querySelectorAll('.confetti');
+
+    document.getElementsByClassName('overlay')[0].classList.remove('js-hidden');
+
+    const [m, s, ms] = getTimeElm(clearTime);
+    document.getElementById('cleartime').textContent = `${m}分${s}秒${ms}`;
+
+    confettiElements.forEach(confetti => {
+        // ランダムな位置に配置
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.animationDelay = Math.random() * 2 + 's'; // アニメーションの遅延時間を短縮
+
+        // カラフルな色をランダムに設定
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    });   
+}
+
+function closeClearOverlay() {
+    document.getElementsByClassName('overlay')[0].classList.add('js-hidden');
+}
