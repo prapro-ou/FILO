@@ -22,7 +22,6 @@ class Sushimaker {
         this.dropTimerId  = null;
 
         for (let i = 0; i < this.height; i++) this.field.push(Array(this.width).fill(0));
-        this._init();
     }
 
     setRice(x) {
@@ -42,12 +41,14 @@ class Sushimaker {
     }
 
     start() {
+        this._init();
         this.slideTimerId = setInterval(() => this._slideTetro(), this.gameSpeed);
     }
 
     update() {
         if (input.isKeyDown('Enter') && !this.isDropping) {
             clearInterval(this.slideTimerId);
+            this.isDropping = true;
             this.dropTimerId = setInterval(() => this._dropTetro(), this.dropSpeed);
             assets.get('drop').play();
         }
@@ -157,6 +158,7 @@ class Sushimaker {
             this.tetroY++;
             this._drawAll();
         } else {
+            clearInterval(this.dropTimerId);
             if (this.tetroY === this.height - 3) {
                 setTimeout(() => this._drawSushi(), 1000);
                 setTimeout(() => this.clear = true, 3000);
@@ -165,8 +167,8 @@ class Sushimaker {
                 setTimeout(() => this.start(), 1000);
             }
             this.canvas.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-            clearInterval(this.dropTimerId);
-            this._init();
+            // clearInterval(this.dropTimerId);
+            // this._init();
         }       
     }
 }
