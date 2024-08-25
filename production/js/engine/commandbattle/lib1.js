@@ -105,8 +105,8 @@ class Hero
 	// attackCommandが選択されたときに表示する攻撃オプションのHTMLを返す
 	getAttackOptionsHTML() {
 		const attackTypes = [
-			{ type: '打撃', className: 'panchiCommand'},
-			{ type: '斬撃', className: 'slashingCommand'}
+			{ type: '絞める', className: 'panchiCommand'},
+			{ type: '捌く', className: 'slashingCommand'}
 		];
 
 
@@ -232,14 +232,14 @@ class Hero
 				// 敵の体力から、自分の攻撃力を引く
 				this.target.hp -= this.offense;
 
-				Message.printMessage(this.name + "の水をかける<br>" + 
+				Message.printMessage(this.name + "の水絞め<br>" + 
 					this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
 			}
 			else if(this.target instanceof Mollusk) {
 				//let molluskhealth = this.offense;
 				this.target.hp -= this.offense*2;
 								
-				Message.printMessage(this.name + "の波乗り<br>効果抜群だ！" +
+				Message.printMessage(this.name + "の水締め<br>効果抜群だ！" +
 					this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
 			}
     	    // 攻撃相手の体力がマイナスになる場合は、0にする
@@ -275,14 +275,14 @@ class Hero
 				this.target.hp -= this.offense*2;
 				console.log(this.target.hp);
 
-				Message.printMessage(this.name + "の斬撃<br>効果抜群だ！" +
+				Message.printMessage(this.name + "の三枚おろし<br>効果抜群だ！" +
 					this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
 			}
 			else if(this.target instanceof Mollusk) {
 				//let molluskhealth = this.offense;
 				this.target.hp -= this.offense;
 
-				Message.printMessage(this.name + "の斬撃<br>" +
+				Message.printMessage(this.name + "の三枚おろし<br>" +
 					this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
 			}
         	// 攻撃相手の体力がマイナスになる場合は、0にする
@@ -303,15 +303,22 @@ class Hero
 		if(attackType === "panchiCommand") {
 			// wave.pngを表示する
 			document.getElementById("wave").style.display = "block";
+			// ice.pngを表示する
+			document.getElementById("ice").style.display = "block";
 			// wave.pngを右に移動させる
 			for(let i = 0; i < 30; i++) {
 				document.getElementById("wave").style.transform = "translateX(" + i + "px)";
+				document.getElementById("ice").style.transform = "translateX(" + 2*i + "px)";
 				await sleep(10);
 			}
 			// wave.pngを隠す
 			document.getElementById("wave").style.display = "none";
+			// ice.pngを隠す
+			document.getElementById("ice").style.display = "none";
 			// wave.pngを元の位置に戻す
 			document.getElementById("wave").style.transform = "translateX(0px)";
+			// ice.pngを元の位置に戻す
+			document.getElementById("ice").style.transform = "translateX(0px)";
 		}
 		// 斬撃攻撃の場合
 		else if(attackType === "slashingCommand") {
@@ -339,13 +346,17 @@ class Hero
 	}
 
 	// 回復する
-	recovery()
+	async recovery()
 	{
 		// 薬草がない場合
 		if(this.herb <= 0) {
 			Message.printMessage(this.name + "は薬草を・・・<br>薬草がない！<br>");
 			return;
 		}
+
+		document.getElementById("heal").style.display = "block";
+		await sleep(1000);
+		document.getElementById("heal").style.display = "none";
 
 		// 体力が最大体力の場合
 		if(this.maxHp == this.hp) {
@@ -533,8 +544,14 @@ class GameManage
 		// 波の画像を表示する
 		this.showWaveImage();
 
+		// 氷の画像を表示する
+		this.showIceImage();
+
 		// エフェクトの画像を表示する
 		this.showEffectImage();
+
+		// 回復エフェクトの画像を表示する
+		this.showHealImage();
 
 		// はじめのメッセージを表示する
 		this.showFirstMessage();
@@ -545,6 +562,8 @@ class GameManage
 		document.addEventListener('keydown', (event) => {
 			if(event.key === 'm') {
 				this.playBGM();
+				// 音量を設定
+				this.bgm.volume = 0.01;
 			}
 		});
 		// nを押すとBGMが止まる
@@ -617,12 +636,28 @@ class GameManage
 		document.getElementById("wave").style.display = "none";
 	}
 
+	// 氷の画像を表示する
+	showIceImage()
+	{
+		this.ImageView.innerHTML += '<img id="ice" src="./img/ice.png" style="position:absolute; left:350px; bottom:100px">';
+		//this.ImageView.innerHTML += '<img id="ice" src="./img/ice.png" style="position:absolute; left:350px; bottom:0px">';
+		// ice.pngを隠す
+		document.getElementById("ice").style.display = "none";
+	}
+
 	// エフェクトの画像を表示する
 	showEffectImage()
 	{
 		this.ImageView.innerHTML += '<img id="effect1" src="./img/effect1.png" style="position:absolute; left:350px; bottom:50px">';
 		// effct1.pngを隠す
 		document.getElementById("effect1").style.display = "none";
+	}
+
+	// 回復エフェクトの画像を表示する
+	showHealImage()
+	{
+		this.ImageView.innerHTML += '<img id="heal" src="./img/heal.png" style="position:absolute; left:60px; bottom:0px">';
+		document.getElementById("heal").style.display = "none";
 	}
 
 	// 戦闘開始時のメッセージを表示する
