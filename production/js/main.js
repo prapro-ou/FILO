@@ -200,6 +200,11 @@ class TitleScene extends Scene {
         view.setBgImg(assets.get('title'), TITLE_CAN_W, TITLE_CAN_H);
 
         this.setView(view);
+
+        
+        setTimeout(() => {
+            openCurtainAnime();
+        }, 500);
     }
 
     update() {
@@ -221,17 +226,18 @@ class TitleScene extends Scene {
 
 class Sushiya extends Scene {
     constructor(canvas) {
-        super(canvas, 'Sushiya');
+        super(canvas, 'Sushiya', assets.get('main_bgm'));
         this.frameCnt = 0;
         this.customers = [];
         this.customerPos = ['C1', 'C3', 'C6', 'C8', 'C10', 'C11', 'C13', 'A1', 'A2', 'A5'];
         this.stock = ['aji', 'anago', 'ebi', 'ika', 'maguro', 'salmon', 'tamago', 'tai', 'toro', 'torosalmon'];
         // this.customerPos = ['C13']
-        // this.stock = ['salmon']
+        // this.stock = ['aji']
         this.inventory = { neta: null, type: null };
         this.isOpenedRefrigirator = false;
         this.startTime   = null;
         this.currentTime = null;
+        this.cleared = false;
 
         const field = new Field(fieldData.sushiya, canvas, assets.get('sushiya_tile'));
         field.shiftX(-4);
@@ -250,7 +256,10 @@ class Sushiya extends Scene {
         setTimeout(() => {
             openCurtainAnime();
             this.startTime = Date.now();
-        }, 500)        
+        }, 500) 
+        setTimeout(() => {
+            this.bgm.play();
+        }, 700) 
     }
 
     changeScene(newScene) {
@@ -261,7 +270,7 @@ class Sushiya extends Scene {
 
     update() {
         if (!super.update()) return;
-        this._displayTime();
+        if (!this.cleared) this._displayTime();
         this._displayQuota();
 
         // Customer is spawn once every 3 seconds.
@@ -273,18 +282,22 @@ class Sushiya extends Scene {
         const player = field.player;
         const [disMapX, disMapY] = getDisplacementByDir(player.direction);
 
-        if(this._isClear()) {
-            this.isActive = false;
+        if (this._isClear() && !this.cleared) {
+            this.cleared = true;
             const clearTime = this.currentTime;
+            openClearOverlay(clearTime);
+            this.bgm.pause();
+        }
+
+        if (this.cleared && input.isKeyDown(' ')) {
             closeCurtainAnime();
             setTimeout(() => {
-                displayMsg('clear');
-            }, 1000);
-            setTimeout(() => {
-                const resultCanvas = new Canvas(RESULT_CAN_W, RESULT_CAN_H, 'resultCanvas');
-                resultCanvas.set(CAN_WRAPPER);
-                const resultScene = new ResultScene(resultCanvas, clearTime);
-                this.changeScene(resultScene);
+                INVENTORY.classList.remove('js-hidden');
+                closeClearOverlay();
+                const titleCanvas = new Canvas(TITLE_CAN_W, TITLE_CAN_H, 'titleCanvas');
+                titleCanvas.set(CAN_WRAPPER);
+                const titleScene = new TitleScene(titleCanvas);
+                this.changeScene(titleScene);
                 this.destroy();
                 this.canvas.destroy();
             }, 2000);
@@ -295,6 +308,7 @@ class Sushiya extends Scene {
             const isCustomer = field.getAttribute(player.mapX + disMapX, player.mapY + disMapY).includes(`seat-${customer.seat}`) && customer.isSitting();
             const haveOrderdSushi =  customer.sushi === this.inventory.neta && this.inventory.type === 'nigiri';
             if (isCustomer && haveOrderdSushi && input.isKeyDown('Enter')) {
+                assets.get('cheer').play();
                 clearInventory();
                 this.inventory.neta = this.inventory.type = null;
                 customer.leave();
@@ -318,6 +332,7 @@ class Sushiya extends Scene {
             });
             refrigirator.addEventListener('closeRef', () => {
                 this.isOpenedRefrigirator = false;
+                this.bgm.play();
             });
             this.isOpenedRefrigirator = true;
             this.stackScene(refrigirator)
@@ -334,10 +349,12 @@ class Sushiya extends Scene {
                 this.inventory.type = 'kirimi';
                 clearInventory();
                 pushInventory(assets.get(`${this.inventory.neta}_kirimi`), 5, 15);
+                this.bgm.play();
             });
             pond.addEventListener('gameover', () => {
                 this.inventory.neta = this.inventory.type = null;
                 clearInventory();
+                this.bgm.play();
             });
             this.stackScene(pond);
         }
@@ -363,6 +380,7 @@ class Sushiya extends Scene {
             cuttingBoard.addEventListener('pushInventory', () => {
                 this.inventory.type = 'nigiri';
                 pushInventory(assets.get(this.inventory.neta), 5);
+                this.bgm.play();
             });
             this.stackScene(cuttingBoard);
         }
@@ -557,7 +575,7 @@ class Refrigirator extends Scene{
 
 class Pond extends Scene {
     constructor(canvas, syokuzai) {
-        super(canvas, 'Refrigerator');
+        super(canvas, 'Refrigerator', assets.get('battle_bgm'));
         this.syokuzai = syokuzai
         const kari = new Kari();
         kari.create();
@@ -608,6 +626,7 @@ class Pond extends Scene {
         this.command.preparation();
 
         this.setView(view);
+        this.bgm.play();
     }
 
     update() {
@@ -630,12 +649,13 @@ class Pond extends Scene {
 
 class CuttingBoard extends Scene {
     constructor(sushimaker) {
-        super(sushimaker.canvas, 'CuttingBoard');
+        super(sushimaker.canvas, 'CuttingBoard', assets.get('sushimaker_bgm'));
         const modal = new Modal();
         modal.create();
         this.setModal(modal);
         this.sushimaker = sushimaker;
         sushimaker.start();
+        this.bgm.play();
     }
 
     update() {
@@ -643,6 +663,7 @@ class CuttingBoard extends Scene {
         this.sushimaker.update();
 
         if(this.sushimaker.clear) { 
+            this.bgm.pause();
             this.dispatchEvent('pushInventory');
             this.close();
             this.destroy();
@@ -743,6 +764,10 @@ window.onload = async () => {
     assets.addImage('salmon_row', './img/salmon.png');
     assets.addImage('tai_row',    './img/tai.png');
     assets.addImage('tamago_row', './img/tamago.png');
+    // assets.addAudio('title_bgm',  './sound/title_bgm.mp3');
+    assets.addAudio('main_bgm',  './sound/ninja-mura.mp3');
+    assets.addAudio('battle_bgm', './sound/battle1.mp3')
+    assets.addAudio('sushimaker_bgm',  './sound/odango-douchu.mp3');
     assets.addAudio('cheer',  './sound/cheer.mp3');
     assets.addAudio('crash',  './sound/crash.mp3');
     assets.addAudio('drop',   './sound/drop.mp3');
