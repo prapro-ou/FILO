@@ -332,10 +332,12 @@ class Sushiya extends Scene {
             });
             refrigirator.addEventListener('closeRef', () => {
                 this.isOpenedRefrigirator = false;
+                assets.get('close-rf_bgm').play();
                 this.bgm.play();
             });
             this.isOpenedRefrigirator = true;
-            this.stackScene(refrigirator)
+            this.stackScene(refrigirator);
+            assets.get('open-rf_bgm').play();
         }
         
 
@@ -764,10 +766,11 @@ window.onload = async () => {
     assets.addImage('salmon_row', './img/salmon.png');
     assets.addImage('tai_row',    './img/tai.png');
     assets.addImage('tamago_row', './img/tamago.png');
-    // assets.addAudio('title_bgm',  './sound/title_bgm.mp3');
     assets.addAudio('main_bgm',  './sound/ninja-mura.mp3');
     assets.addAudio('battle_bgm', './sound/battle1.mp3')
     assets.addAudio('sushimaker_bgm',  './sound/odango-douchu.mp3');
+    assets.addAudio('open-rf_bgm', './sound/open-rf.mp3')
+    assets.addAudio('close-rf_bgm', './sound/close-rf.mp3')
     assets.addAudio('cheer',  './sound/cheer.mp3');
     assets.addAudio('crash',  './sound/crash.mp3');
     assets.addAudio('drop',   './sound/drop.mp3');
