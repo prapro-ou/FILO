@@ -558,20 +558,20 @@ class GameManage
 
 		// Mを押すとBGMが流れる
 		// BGM用のAudioオブジェクトを初期化
-        this.bgm = new Audio('./sound/battle1.mp3');
-		document.addEventListener('keydown', (event) => {
-			if(event.key === 'm') {
-				this.playBGM();
-				// 音量を設定
-				this.bgm.volume = 0.01;
-			}
-		});
-		// nを押すとBGMが止まる
-		document.addEventListener('keydown', (event) => {
-			if(event.key === 'n') {
-				this.stopBGM();
-			}
-		});
+        // this.bgm = new Audio('./sound/battle1.mp3');
+		// document.addEventListener('keydown', (event) => {
+		// 	if(event.key === 'm') {
+		// 		this.playBGM();
+		// 		// 音量を設定
+		// 		this.bgm.volume = 0.01;
+		// 	}
+		// });
+		// // nを押すとBGMが止まる
+		// document.addEventListener('keydown', (event) => {
+		// 	if(event.key === 'n') {
+		// 		this.stopBGM();
+		// 	}
+		// });
 	}
 
 	// 行動の順番を決める
@@ -753,7 +753,7 @@ class GameManage
 			// 決着がついた場合
 			if (winLose === "win" || winLose === "lose") {
 				// BGMを止める
-				this.stopBGM();
+				// this.stopBGM();
 
 				// 別の画面を表示する処理を書く
 				// 例えば、勝利画面を表示する場合
