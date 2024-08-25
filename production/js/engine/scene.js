@@ -3,11 +3,12 @@ class Scene extends EventDispatcher {
     // canvas:    Canvas   ... Target canvas for drawing.
     // name:      string   ... Scene's name.
     // ----------------------------------------------------
-    constructor(canvas, name) {
+    constructor(canvas, name, bgm = null) {
         super();
         this.canvas = canvas;
         this.name   = name;
-
+        this.bgm = bgm
+        if (bgm) bgm.loop = true;
         this.children = null;   // children: Field | View
         this.field = null;
         this.views = [];
@@ -37,11 +38,13 @@ class Scene extends EventDispatcher {
 
     changeScene(newScene) {
         const e = new Event(newScene);
+        if (this.bgm) this.bgm.pause();
         this.dispatchEvent('changeScene', e);
     }
 
     stackScene(subScene) {
         const savedSubScene = this.subScenes.get(subScene.name);
+        if (this.bgm) this.bgm.pause();
         if (savedSubScene === undefined) {
             subScene.addEventListener('changeScene', (e) => {
                 this.stackScene(e.target);
@@ -75,11 +78,13 @@ class Scene extends EventDispatcher {
     close() {
         if (this.modal === null) return;
         const e = new Event(this);
+        if (this.bgm) this.bgm.pause();
         this.dispatchEvent('close', e);
     }
 
     destroy() {
         const e = new Event(this);
+        if (this.bgm) this.bgm.pause();
         this.dispatchEvent('destroy', e);
     }
 
