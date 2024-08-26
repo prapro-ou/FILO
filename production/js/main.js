@@ -577,7 +577,7 @@ class Refrigirator extends Scene{
 
 class Pond extends Scene {
     constructor(canvas, syokuzai) {
-        super(canvas, 'Refrigerator', assets.get('battle_bgm'));
+        super(canvas, 'Pond', assets.get('battle_bgm'));
         this.syokuzai = syokuzai
         const kari = new Kari();
         kari.create();
@@ -673,45 +673,45 @@ class CuttingBoard extends Scene {
     }
 }
 
-class ResultScene extends Scene {
-    constructor(canvas, clearTime) {
-        super(canvas, 'Result');
-        this.clearTime = clearTime;
+// class ResultScene extends Scene {
+//     constructor(canvas, clearTime) {
+//         super(canvas, 'Result');
+//         this.clearTime = clearTime;
 
-        const view = new View(canvas); 
-        // TODO: finish this scene.
-        // view.setBgImg(assets.get('result'), MAIN_CAN_W, MAIN_CAN_H);
-        view.setBgColor('#39aabc')
+//         const view = new View(canvas); 
+//         // TODO: finish this scene.
+//         // view.setBgImg(assets.get('result'), MAIN_CAN_W, MAIN_CAN_H);
+//         view.setBgColor('#39aabc')
 
-        const [m, s, ms] = getTimeElm(clearTime);
-        const timeText = new Text(`${m}分${s}秒${ms}`, F_TITLE, 30, '#000', 'bold');    
-        timeText.center();
-        timeText.y = 50;
-        view.add(timeText);
+//         const [m, s, ms] = getTimeElm(clearTime);
+//         const timeText = new Text(`${m}分${s}秒${ms}`, F_TITLE, 30, '#000', 'bold');    
+//         timeText.center();
+//         timeText.y = 50;
+//         view.add(timeText);
 
-        this.setView(view);
+//         this.setView(view);
 
-        setTimeout(() => {
-            hideMsg('clear');
-        }, 600);
-        setTimeout(() => {
-            openCurtainAnime();
-        }, 800);
-    }
+//         setTimeout(() => {
+//             hideMsg('clear');
+//         }, 600);
+//         setTimeout(() => {
+//             openCurtainAnime();
+//         }, 800);
+//     }
 
-    update() {
-        if (!super.update()) return;
+//     update() {
+//         if (!super.update()) return;
 
-        if(input.isKeyDown(' ')) {
-            const titleCanvas = new Canvas(TITLE_CAN_W, TITLE_CAN_H, 'titleCanvas');
-            titleCanvas.set(CAN_WRAPPER);
-            const titleScene = new TitleScene(titleCanvas);
-            this.changeScene(titleScene);
-            this.destroy();
-            this.canvas.destroy();
-        }
-    }
-}
+//         if(input.isKeyDown(' ')) {
+//             const titleCanvas = new Canvas(TITLE_CAN_W, TITLE_CAN_H, 'titleCanvas');
+//             titleCanvas.set(CAN_WRAPPER);
+//             const titleScene = new TitleScene(titleCanvas);
+//             this.changeScene(titleScene);
+//             this.destroy();
+//             this.canvas.destroy();
+//         }
+//     }
+// }
 
 
 window.onload = async () => {
